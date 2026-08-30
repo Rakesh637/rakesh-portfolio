@@ -1,0 +1,3940 @@
+/* Extracted from the original final portfolio. UI styles unchanged. */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --navy:#2e3b67;
+  --muted:#73819f;
+  --green:#28ae73;
+  --green-dark:#4d812a;
+  --sky:#cceefa;
+  --grass:#dcefcf;
+  --white:#fff;
+  --line:#e5eaf0;
+  --shadow:0 18px 45px rgba(45,68,91,.11);
+  --shadow-hover:0 24px 55px rgba(45,68,91,.15);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Nunito,system-ui,sans-serif;color:var(--navy)}
+body{background:linear-gradient(180deg,#c9ecfa 0%,#e8f4ee 53%,#dcefcf 100%)}
+button,a{font:inherit}
+a{text-decoration:none!important;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid rgba(40,174,115,.45);outline-offset:3px}
+.hidden{display:none!important}
+
+/* ---------- shared scenery ---------- */
+.scene{
+  min-height:100vh;position:relative;overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 38%,rgba(255,255,255,.18),transparent 35%),
+    linear-gradient(180deg,#a8dfea 0%,#c8e9e8 34%,#e3f1e7 61%,#dcefcf 100%);
+  background-size:100% 100%;
+}
+.scene:after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.22;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.55) 0 1px,transparent 1.5px),radial-gradient(circle at 80% 60%,rgba(74,126,79,.20) 0 1px,transparent 1.5px);
+  background-size:90px 90px,120px 120px;
+}
+.cloud{
+  position:absolute;width:110px;height:34px;background:#fff;border-radius:999px;opacity:.78;
+}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:50px;height:50px;left:10px;bottom:6px}
+.cloud:after{width:58px;height:58px;right:4px;bottom:0}
+.cloud.one{top:38px;left:31%;animation:cloudDriftA 24s ease-in-out infinite alternate}.cloud.two{top:75px;right:7%;animation:cloudDriftB 30s ease-in-out infinite alternate}.cloud.three{top:110px;left:49%;transform:scale(.85);animation:cloudDriftC 27s ease-in-out infinite alternate}
+@keyframes cloudDriftA{from{transform:translateX(-24px)}to{transform:translateX(34px)}}
+@keyframes cloudDriftB{from{transform:translateX(28px)}to{transform:translateX(-34px)}}
+@keyframes cloudDriftC{from{transform:translateX(-18px) scale(.85)}to{transform:translateX(25px) scale(.85)}}
+
+
+/* ---------- flying Pokémon scenery ---------- */
+.flying-pokemon{
+  position:absolute;
+  z-index:1;
+  width:clamp(42px,5vw,76px);
+  height:auto;
+  object-fit:contain;
+  image-rendering:auto;
+  filter:drop-shadow(0 7px 7px rgba(37,78,46,.18));
+  pointer-events:none;
+  user-select:none;
+  will-change:transform;
+}
+.flying-pokemon::after{content:"";position:absolute}
+.pkmn-charizard{
+  top:21%;left:8%;
+  width:clamp(58px,6.5vw,94px);
+  animation:flyCharizard 13s ease-in-out infinite;
+}
+.pkmn-pidgey{
+  top:34%;right:10%;
+  width:clamp(44px,5vw,72px);
+  animation:flyPidgey 10s ease-in-out infinite;
+}
+.pkmn-butterfree{
+  top:17%;right:27%;
+  width:clamp(46px,5vw,74px);
+  animation:flyButterfree 12s ease-in-out infinite;
+}
+.pkmn-dragonite{
+  top:43%;left:17%;
+  width:clamp(48px,5.5vw,82px);
+  animation:flyDragonite 15s ease-in-out infinite;
+}
+@keyframes flyCharizard{
+  0%,100%{transform:translate3d(-10px,5px,0) rotate(-2deg)}
+  25%{transform:translate3d(55px,-12px,0) rotate(2deg)}
+  50%{transform:translate3d(115px,7px,0) rotate(-1deg)}
+  75%{transform:translate3d(55px,22px,0) rotate(2deg)}
+}
+@keyframes flyPidgey{
+  0%,100%{transform:translate3d(12px,0,0) rotate(2deg)}
+  30%{transform:translate3d(-45px,-14px,0) rotate(-3deg)}
+  60%{transform:translate3d(-100px,5px,0) rotate(1deg)}
+  85%{transform:translate3d(-48px,18px,0) rotate(-2deg)}
+}
+@keyframes flyButterfree{
+  0%,100%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
+  25%{transform:translate3d(-35px,15px,0) rotate(2deg) scale(1.02)}
+  50%{transform:translate3d(-78px,-4px,0) rotate(-2deg) scale(.98)}
+  75%{transform:translate3d(-38px,-18px,0) rotate(1deg) scale(1.01)}
+}
+@keyframes flyDragonite{
+  0%,100%{transform:translate3d(0,4px,0) rotate(2deg)}
+  35%{transform:translate3d(70px,-18px,0) rotate(-2deg)}
+  70%{transform:translate3d(125px,8px,0) rotate(2deg)}
+}
+@media (max-width:700px){
+  .pkmn-charizard{left:3%;top:23%}
+  .pkmn-pidgey{right:3%;top:31%}
+  .pkmn-butterfree{right:13%;top:16%}
+  .pkmn-dragonite{left:5%;top:44%}
+}
+
+
+/* =========================================================
+   V11 — Production polish
+   ========================================================= */
+
+/* More depth in the landing world */
+#opening{
+  background:
+    radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.18),transparent 28%),
+    linear-gradient(180deg,#55bde9 0%,#82d1e9 27%,#d8efd9 50%,#bfe66f 68%,#73bd43 100%);
+}
+#opening:after{
+  content:"";
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 76%,rgba(255,255,255,.30) 0 1px,transparent 2px),
+    radial-gradient(circle at 26% 82%,rgba(255,255,255,.24) 0 1px,transparent 2px),
+    radial-gradient(circle at 71% 74%,rgba(255,255,255,.25) 0 1px,transparent 2px),
+    radial-gradient(circle at 89% 86%,rgba(255,255,255,.22) 0 1px,transparent 2px);
+  background-size:140px 100px,190px 130px,160px 110px,210px 150px;
+  animation:worldSparkle 7s ease-in-out infinite alternate;
+}
+@keyframes worldSparkle{
+  from{opacity:.45;transform:translateY(0)}
+  to{opacity:.85;transform:translateY(-4px)}
+}
+
+/* Stronger but still tasteful grass motion */
+.opening-grass{
+  height:30%;
+  background:
+    repeating-linear-gradient(78deg,transparent 0 27px,rgba(28,91,35,.28) 28px 30px),
+    radial-gradient(ellipse at 20% 90%,rgba(255,255,255,.35) 0 2px,transparent 3px),
+    radial-gradient(ellipse at 70% 70%,rgba(255,255,255,.28) 0 2px,transparent 3px);
+  animation:grassBreeze 4.5s ease-in-out infinite alternate;
+  transform-origin:50% 100%;
+}
+@keyframes grassBreeze{
+  from{transform:skewX(0deg) translateY(0)}
+  to{transform:skewX(-.55deg) translateY(-2px)}
+}
+.grass-front{
+  animation:grassFront 5.5s ease-in-out infinite alternate;
+}
+@keyframes grassFront{
+  from{transform:translate3d(0,0,0) skewX(0deg)}
+  to{transform:translate3d(-5px,0,0) skewX(-.45deg)}
+}
+
+/* Clouds travel farther and faster */
+.opening-cloud.c1{animation:openingCloudFastA 8s ease-in-out infinite alternate}
+.opening-cloud.c2{animation:openingCloudFastB 9.5s ease-in-out infinite alternate}
+@keyframes openingCloudFastA{
+  from{transform:translate3d(-80px,0,0)}
+  to{transform:translate3d(115px,0,0)}
+}
+@keyframes openingCloudFastB{
+  from{transform:translate3d(80px,0,0) scale(.8)}
+  to{transform:translate3d(-120px,0,0) scale(.8)}
+}
+
+/* Ball: larger, clearer float, tiny tilt from pointer, premium shadow */
+.ball{
+  width:min(46vw,580px);
+  height:min(46vw,580px);
+  min-width:340px;
+  min-height:340px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);
+}
+.ball-float{
+  animation:ballFloatV11 4.2s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+@keyframes ballFloatV11{
+  0%,100%{transform:translateY(0)}
+  25%{transform:translateY(-4px)}
+  50%{transform:translateY(-9px)}
+  75%{transform:translateY(-4px)}
+}
+.ball-float::after{
+  bottom:-25px;
+  left:23%;right:23%;
+  height:25px;
+  background:rgba(37,78,39,.19);
+  filter:blur(11px);
+  animation:ballShadowV11 4.2s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+@keyframes ballShadowV11{
+  0%,100%{transform:scaleX(1);opacity:.19}
+  50%{transform:scaleX(.84);opacity:.10}
+}
+.ball:hover{
+  filter:drop-shadow(0 34px 38px rgba(49,84,28,.31));
+}
+.ball-center{
+  box-shadow:
+    0 0 0 6px #e1e3e4 inset,
+    0 0 0 1px #7f8488,
+    0 0 24px rgba(255,255,255,.18);
+}
+.ball-center:after{
+  animation:centerPulseV11 2.8s ease-in-out infinite;
+}
+@keyframes centerPulseV11{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.08);opacity:.94}
+}
+
+/* Flying Pokémon: clearer depth + gentle vertical drift */
+.flying-pokemon{
+  z-index:1;
+  opacity:.92;
+}
+.pkmn-charizard{animation:flyCharizardV11 11s ease-in-out infinite}
+.pkmn-pidgey{animation:flyPidgeyV11 8.5s ease-in-out infinite}
+.pkmn-butterfree{animation:flyButterfreeV11 10s ease-in-out infinite}
+.pkmn-dragonite{animation:flyDragoniteV11 13s ease-in-out infinite}
+@keyframes flyCharizardV11{
+  0%,100%{transform:translate3d(-15px,6px,0) rotate(-2deg)}
+  25%{transform:translate3d(55px,-15px,0) rotate(2deg)}
+  50%{transform:translate3d(125px,4px,0) rotate(-1deg)}
+  75%{transform:translate3d(65px,22px,0) rotate(2deg)}
+}
+@keyframes flyPidgeyV11{
+  0%,100%{transform:translate3d(14px,0,0) rotate(2deg)}
+  25%{transform:translate3d(-38px,-17px,0) rotate(-3deg)}
+  55%{transform:translate3d(-105px,4px,0) rotate(1deg)}
+  80%{transform:translate3d(-50px,20px,0) rotate(-2deg)}
+}
+@keyframes flyButterfreeV11{
+  0%,100%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
+  25%{transform:translate3d(-42px,18px,0) rotate(2deg) scale(1.03)}
+  50%{transform:translate3d(-90px,-5px,0) rotate(-2deg) scale(.98)}
+  75%{transform:translate3d(-45px,-21px,0) rotate(1deg) scale(1.02)}
+}
+@keyframes flyDragoniteV11{
+  0%,100%{transform:translate3d(0,4px,0) rotate(2deg)}
+  35%{transform:translate3d(78px,-22px,0) rotate(-2deg)}
+  70%{transform:translate3d(140px,8px,0) rotate(2deg)}
+}
+
+/* Opening typography */
+.opening-title{
+  text-shadow:0 2px 0 rgba(255,255,255,.20);
+}
+.opening-sub{
+  letter-spacing:.01em;
+}
+.open-btn{
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.open-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 13px 28px rgba(33,67,24,.25);
+}
+.open-btn:active{transform:translateY(0) scale(.99)}
+
+/* Cinematic click: a real anticipation beat before the split */
+#opening.opening-out .ball{
+  animation:ballImpactV11 .72s cubic-bezier(.2,.85,.25,1) both;
+}
+@keyframes ballImpactV11{
+  0%{transform:scale(1) rotate(0)}
+  22%{transform:scale(.955) rotate(-2deg)}
+  42%{transform:scale(1.045) rotate(2deg)}
+  62%{transform:scale(.985) rotate(-.8deg)}
+  78%{transform:scale(1.015) rotate(.35deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+#opening.opening-out .opening-title,
+#opening.opening-out .opening-sub{
+  animation:openingFadeV11 .55s .18s ease forwards;
+}
+#opening.opening-out .open-btn{
+  animation:buttonExitV11 .45s .05s ease forwards;
+}
+@keyframes openingFadeV11{
+  to{opacity:0;transform:translateY(-22px) scale(.98)}
+}
+@keyframes buttonExitV11{
+  to{opacity:0;transform:translateY(10px) scale(.96)}
+}
+
+/* Portfolio micro-interactions */
+.details-card,.details-profile{
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.details-card:hover{
+  box-shadow:var(--shadow-hover);
+}
+.project{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.55);
+}
+.project:after{
+  content:"";
+  position:absolute;
+  inset:auto -30% -65% -30%;
+  height:90%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.42),transparent 65%);
+  opacity:0;
+  transition:opacity .25s ease,transform .25s ease;
+  pointer-events:none;
+}
+.project:hover:after{
+  opacity:1;
+  transform:translateY(-12px);
+}
+.tech{
+  cursor:default;
+}
+
+/* Character card gets the same gentle life as the landing ball */
+.character-box{
+  box-shadow:inset 0 -18px 22px rgba(58,105,39,.06);
+}
+.character-box img{
+  animation:characterIdleV11 3.2s ease-in-out infinite;
+}
+@keyframes characterIdleV11{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  20%{transform:translate3d(-2px,-2px,0) rotate(-.35deg) scale(1.002)}
+  48%{transform:translate3d(2px,-7px,0) rotate(.55deg) scale(1.008)}
+  72%{transform:translate3d(3px,-3px,0) rotate(.25deg) scale(1.004)}
+  88%{transform:translate3d(-1px,-1px,0) rotate(-.18deg) scale(1.001)}
+}
+
+/* Better mobile opening composition */
+@media(max-width:700px){
+  .ball{
+    width:min(78vw,430px);
+    height:min(78vw,430px);
+    min-width:280px;
+    min-height:280px;
+  }
+  .opening-title{font-size:clamp(30px,9vw,42px)}
+  .opening-sub{font-size:12px}
+  .pkmn-charizard{left:1%;top:25%;opacity:.65}
+  .pkmn-pidgey{right:1%;top:32%;opacity:.65}
+  .pkmn-butterfree{right:8%;top:14%;opacity:.6}
+  .pkmn-dragonite{left:3%;top:45%;opacity:.55}
+}
+@media(max-width:560px){
+  .opening-foot{bottom:20px;font-size:9px}
+}
+
+/* Accessibility */
+@media(prefers-reduced-motion:reduce){
+  #opening:after,
+  .opening-grass,.grass-front,
+  .opening-cloud,.flying-pokemon,
+  .ball-float,.ball-float::after,.ball-center::after,
+  .character-box img{animation:none!important}
+}
+
+/* ---------- opening screen ---------- */
+#opening{
+  position:fixed;inset:0;z-index:1000;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--navy);
+  background:linear-gradient(180deg,#55bde9 0%,#8ed7ed 28%,#e8f1cf 52%,#b9df67 72%,#5fae37 100%);
+}
+#opening:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:linear-gradient(180deg,transparent 48%,rgba(255,255,210,.28) 54%,rgba(93,161,49,.18) 72%,rgba(37,104,39,.18) 100%)}
+.opening-hills{position:absolute;inset:auto -5% 13% -5%;height:42%;pointer-events:none;background:
+  radial-gradient(ellipse at 16% 100%,#77bd50 0 35%,transparent 36%),
+  radial-gradient(ellipse at 48% 100%,#8bc95a 0 38%,transparent 39%),
+  radial-gradient(ellipse at 82% 100%,#70b64a 0 36%,transparent 37%);filter:saturate(.95)}
+.opening-mountains{position:absolute;left:0;right:0;bottom:32%;height:31%;pointer-events:none;opacity:.42;background:linear-gradient(135deg,transparent 0 25%,#78aeb3 25% 34%,transparent 34% 44%,#5e9fa7 44% 55%,transparent 55% 65%,#8ab9b2 65% 76%,transparent 76%);clip-path:polygon(0 100%,0 48%,12% 18%,23% 55%,35% 28%,48% 60%,62% 15%,75% 58%,87% 24%,100% 52%,100% 100%)}
+.opening-grass{position:absolute;left:-2%;right:-2%;bottom:0;height:28%;pointer-events:none;background:repeating-linear-gradient(78deg,transparent 0 27px,rgba(28,91,35,.28) 28px 30px),radial-gradient(ellipse at 20% 90%,rgba(255,255,255,.35) 0 2px,transparent 3px),radial-gradient(ellipse at 70% 70%,rgba(255,255,255,.28) 0 2px,transparent 3px);background-size:auto,90px 55px,120px 70px}
+
+.opening-parallax{position:absolute;inset:-5%;pointer-events:none;will-change:transform}
+.grass-back{opacity:.20;background:repeating-linear-gradient(76deg,transparent 0 42px,rgba(59,108,35,.22) 43px 45px)}
+.grass-mid{opacity:.17;transform:translate3d(0,30px,0);background:
+  radial-gradient(ellipse at 15% 92%,rgba(44,94,31,.30) 0 2%,transparent 2.4%),
+  radial-gradient(ellipse at 82% 85%,rgba(44,94,31,.22) 0 2%,transparent 2.4%);
+  background-size:130px 90px,150px 105px}
+.grass-front{top:66%;bottom:-10%;opacity:.22;background:
+  repeating-linear-gradient(77deg,transparent 0 34px,rgba(47,105,33,.28) 35px 37px)}
+.opening-cloud{position:absolute;background:rgba(255,255,255,.74);border-radius:999px;width:84px;height:28px;filter:blur(.2px);pointer-events:none}
+.opening-cloud:before,.opening-cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}
+.opening-cloud:before{width:42px;height:42px;left:8px;bottom:5px}.opening-cloud:after{width:48px;height:48px;right:0;bottom:0}
+.opening-cloud.c1{top:7%;left:18%;animation:openingCloudA 10s ease-in-out infinite alternate}.opening-cloud.c2{top:13%;right:12%;transform:scale(.8);animation:openingCloudB 12s ease-in-out infinite alternate}
+@keyframes openingCloudA{from{margin-left:-55px}to{margin-left:80px}}
+@keyframes openingCloudB{from{margin-right:-70px}to{margin-right:60px}}
+.opening-content{position:relative;z-index:2;width:100%;height:100%;
+  --ball-x:0px;--ball-y:0px;--ball-r:0deg;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px}
+.opening-title{text-align:center;margin:0 0 10px;font-size:clamp(31px,4vw,48px);font-weight:900;letter-spacing:-.035em}
+.opening-sub{text-align:center;margin:0 0 20px;color:#5f8c43;font-size:14px;font-weight:600}
+.ball-float{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:ballFloat 4.8s ease-in-out infinite;
+  transform-origin:center;
+  will-change:transform;
+}
+.ball-float::after{
+  content:"";
+  position:absolute;
+  left:20%;
+  right:20%;
+  bottom:-18px;
+  height:20px;
+  border-radius:50%;
+  background:rgba(42,83,34,.18);
+  filter:blur(10px);
+  z-index:-1;
+  animation:ballShadow 4.8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes ballShadow{
+  0%,100%{transform:scaleX(1);opacity:.18}
+  42%{transform:scaleX(.88);opacity:.11}
+  65%{transform:scaleX(.94);opacity:.14}
+}
+@keyframes ballFloat{
+  0%,100%{transform:translate3d(0,0,0) rotate(-.18deg) scale(1)}
+  18%{transform:translate3d(-2px,-2px,0) rotate(-.32deg) scale(1.002)}
+  42%{transform:translate3d(2px,-5px,0) rotate(.35deg) scale(1.006)}
+  65%{transform:translate3d(3px,-3px,0) rotate(.22deg) scale(1.003)}
+  82%{transform:translate3d(-1px,-1px,0) rotate(-.2deg) scale(1.001)}
+}
+.ball{
+  width:min(44vw,560px);height:min(44vw,560px);min-width:320px;min-height:320px;
+  aspect-ratio:1/1;position:relative;cursor:pointer;border-radius:50%;
+  overflow:hidden;filter:drop-shadow(0 27px 28px rgba(49,84,28,.24));
+  transition:filter .2s,transform .18s ease;
+  transform:translate3d(var(--ball-x),var(--ball-y),0) rotate(var(--ball-r));
+  will-change:transform;
+}
+.ball:hover{filter:drop-shadow(0 31px 34px rgba(49,84,28,.29))}
+.ball-half{
+  position:absolute;left:0;width:100%;height:50%;overflow:hidden;z-index:2;
+  transition:transform .9s cubic-bezier(.72,0,.18,1),opacity .35s;
+}
+.ball-top{top:0;border-radius:50% 50% 0 0;background:linear-gradient(155deg,#ff5059,#c91825)}
+.ball-bottom{bottom:0;border-radius:0 0 50% 50%;background:linear-gradient(155deg,#fff,#d7d9db)}
+.ball-top:after,.ball-bottom:after{content:"";position:absolute;left:0;right:0;height:6px;background:#24282d}
+.ball-top:after{bottom:-3px}.ball-bottom:after{top:-3px}
+.ball-highlight{position:absolute;left:13%;top:10%;width:28%;height:16%;border-radius:50%;background:rgba(255,255,255,.20);filter:blur(7px)}
+.ball-center{
+  position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:24%;height:24%;border-radius:50%;background:#f5f6f6;
+  border:9px solid #24282d;box-shadow:0 0 0 6px #e1e3e4 inset,0 0 0 1px #7f8488;
+  transition:transform .9s cubic-bezier(.72,0,.18,1),opacity .30s;
+}
+.ball-center:after{content:"";position:absolute;inset:25%;border-radius:50%;background:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.13)}
+
+.opening-flash{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.98) 0%,rgba(255,255,255,.72) 10%,rgba(255,255,255,0) 48%);
+  opacity:0;
+}
+#opening.opening-out .opening-flash{
+  animation:flash .75s .48s ease-out forwards;
+}
+@keyframes flash{
+  0%{opacity:0;transform:scale(.55)}
+  20%{opacity:.9}
+  100%{opacity:0;transform:scale(1.5)}
+}
+
+/* Cinematic Pokéball opening */
+.ball{
+  isolation:isolate;
+}
+.ball::before{
+  content:"";
+  position:absolute;
+  inset:7%;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.0);
+  z-index:8;
+  pointer-events:none;
+}
+.ball-center::before{
+  content:"";
+  position:absolute;
+  inset:-28%;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,0);
+  transform:scale(.55);
+  opacity:0;
+}
+#opening.opening-out .ball{
+  animation:ballImpact .62s cubic-bezier(.2,.85,.25,1) both;
+  filter:drop-shadow(0 35px 42px rgba(39,74,28,.34));
+}
+#opening.opening-out .ball::before{
+  animation:energyRing 1.05s .25s ease-out both;
+}
+#opening.opening-out .ball-top{
+  transform:translate3d(-7vw,-62vh,0) rotate(-7deg) scale(.98);
+}
+#opening.opening-out .ball-bottom{
+  transform:translate3d(7vw,62vh,0) rotate(7deg) scale(.98);
+}
+#opening.opening-out .ball-center{
+  transform:translate(-50%,-50%) scale(2.25);
+  opacity:0;
+  box-shadow:0 0 0 6px #e1e3e4 inset,0 0 0 1px #7f8488,0 0 35px 18px rgba(255,255,255,.78);
+}
+#opening.opening-out .ball-center::before{
+  animation:centerBurst .72s .08s ease-out both;
+}
+#opening.opening-out .ball-float{animation:none}
+#opening.opening-out .opening-title,
+#opening.opening-out .opening-sub,
+#opening.opening-out .open-btn,
+#opening.opening-out .opening-foot{
+  animation:openingFade .65s .32s ease forwards;
+}
+#opening.opening-out .opening-parallax{
+  animation:scenePush 1.05s ease forwards;
+}
+#opening.opening-out .flying-pokemon{
+  animation:flyAway 1s cubic-bezier(.2,.8,.2,1) forwards;
+  opacity:0;
+}
+@keyframes flyAway{
+  to{transform:translate3d(0,-30vh,0) scale(.7);opacity:0}
+}
+@keyframes ballImpact{
+  0%{transform:scale(1) rotate(0)}
+  25%{transform:scale(.965) rotate(-1.8deg)}
+  48%{transform:scale(1.035) rotate(1.8deg)}
+  70%{transform:scale(.99) rotate(-.7deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+@keyframes energyRing{
+  0%{inset:7%;border-color:rgba(255,255,255,0);opacity:0;transform:scale(.65)}
+  20%{border-color:rgba(255,255,255,.85);opacity:1}
+  100%{inset:-13%;border-color:rgba(255,255,255,0);opacity:0;transform:scale(1.22)}
+}
+@keyframes centerBurst{
+  0%{transform:scale(.55);opacity:.15;border-color:rgba(255,255,255,.1)}
+  35%{transform:scale(1.25);opacity:1;border-color:rgba(255,255,255,.95)}
+  100%{transform:scale(2.25);opacity:0;border-color:rgba(255,255,255,0)}
+}
+@keyframes openingFade{
+  to{opacity:0;transform:translateY(-10px)}
+}
+@keyframes scenePush{
+  to{transform:translate3d(calc(var(--mx) * 1.8),calc(var(--my) * 1.8),0) scale(1.035)}
+}
+.open-btn{
+  margin-top:16px;border:2px solid rgba(43,73,36,.20);background:#eef6dc;color:#294a2f;
+  padding:12px 25px;border-radius:999px;font-weight:900;font-size:13px;
+  box-shadow:0 8px 20px rgba(33,67,24,.20);position:relative;z-index:5
+}
+.opening-foot{position:absolute;bottom:32px;z-index:3;color:#fff;font-size:10px;font-weight:900;letter-spacing:1px}
+@media (prefers-reduced-motion:reduce){
+  .ball-float{animation:none}.opening-parallax{transform:none!important}.cloud,.opening-cloud,.flying-pokemon,.character-box,.character-box img,.character-box:after,.ball-float,.ball-float:after{animation:none!important}
+  .ball{transform:none!important}
+  .ball-half,.ball-center{transition:none}
+}
+@media(max-width:560px){
+  .flying-pokemon{opacity:.72}
+  .opening-mountains{bottom:31%;height:27%}
+  .ball{min-width:260px;min-height:260px;width:min(74vw,430px);height:min(74vw,430px)}
+  .opening-title{font-size:31px}.opening-sub{font-size:12px}
+  #opening.opening-out .ball-top{transform:translateY(-100vh)}
+  #opening.opening-out .ball-bottom{transform:translateY(100vh)}
+  #opening.opening-out .ball-center{transform:translate(-50%,-50%) scale(.2)}
+
+}
+/* ---------- details ---------- */
+#details,#portfolio{min-height:100vh}
+.page-wrap{max-width:1220px;margin:auto;padding:24px 28px 70px;position:relative;z-index:2}
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;background:#fff;border:0;border-radius:14px;
+  padding:12px 18px;color:var(--navy);font-weight:900;box-shadow:0 8px 20px rgba(38,61,83,.08);transition:transform .18s ease,box-shadow .18s ease
+}
+.back-btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(38,61,83,.12)}
+.back-btn:active{transform:translateY(0)}
+
+.details-grid{display:grid;grid-template-columns:320px 1fr;gap:26px;margin-top:28px;align-items:start}
+.details-profile,.details-card,.portfolio-card{
+  background:#fff;border-radius:24px;box-shadow:var(--shadow)
+}
+.details-profile{padding:16px;text-align:center}
+.section-mini{font-size:11px;letter-spacing:1.5px;color:#9aa7be;font-weight:900;margin:6px 0 17px}
+.character-box{
+  height:320px;border-radius:18px;overflow:hidden;position:relative;
+  background:linear-gradient(#bfe8f7 0 54%,#d7edb9 54% 87%,#8bc547 87%);
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:none;
+}
+@keyframes characterScene{0%,100%{background-position:0 0}50%{background-position:0 4px}}
+
+.character-box img{
+  height:86%;width:auto;max-width:86%;object-fit:contain;
+  filter:drop-shadow(0 8px 5px rgba(31,65,27,.16));
+  animation:idle 4.8s ease-in-out infinite;
+  transform-origin:50% 100%
+}
+@keyframes idle{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg)}
+  50%{transform:translate3d(0,-3px,0) rotate(.35deg)}
+}
+.badge{position:absolute;top:12px;background:rgba(55,72,77,.78);color:#f3f7f1;border-radius:999px;padding:7px 11px;font-size:11px;z-index:3}
+.badge b{font-size:13px}.badge.ht{left:11px}.badge.wt{right:11px}
+.profile-name{font-size:25px;font-weight:900;margin-top:20px}
+.profile-role{font-size:14px;color:#9aa6bc;margin-top:3px}
+.profile-tagline{font-size:14px;color:#667596;line-height:1.45;margin:10px 8px 20px}
+.location,.profile-link{
+  display:flex;align-items:center;justify-content:space-between;background:#f6f8fa;border-radius:12px;
+  padding:13px 15px;text-align:left;margin-top:9px;font-size:13px;font-weight:800
+}
+.location{justify-content:flex-start;gap:10px}
+.label{font-size:10px;letter-spacing:1.5px;color:#a4afc1;font-weight:900;text-align:left;margin:21px 0 8px}
+.skills{display:flex;flex-wrap:wrap;gap:7px}
+.skill{font-size:11px;font-weight:800;padding:6px 10px;border-radius:999px}
+.s1{background:#e5f1d9;color:#507638}.s2{background:#dcecf9;color:#39709d}.s3{background:#fde8d5;color:#ad631d}
+.s4{background:#eee1fa;color:#7950a4}.s5{background:#f9dce7;color:#ad3d69}.s6{background:#f9edbd;color:#86620c}
+.details-content{display:grid;gap:18px}
+.details-card{padding:26px}
+.card-title{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.pokeball-icon{width:19px;height:19px;border:2px solid #172238;border-radius:50%;display:inline-block;position:relative;background:linear-gradient(#ef573e 0 44%,#fff 44% 56%,#172238 56%)}
+.pokeball-icon:after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;border:1px solid #172238;left:5px;top:5px}
+.details-card p{font-size:15px;line-height:1.75;color:#61708f;margin:0 0 15px}
+.details-card p:last-child{margin-bottom:0}
+.details-projects .card-title{margin-bottom:18px}
+.details-projects .projects{gap:14px}
+.details-projects .project{padding:16px 17px;min-height:142px}
+.details-projects .project h3{font-size:16px}
+.details-projects .project p{font-size:13px;line-height:1.45;margin-top:5px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#f5f8fa;border-radius:14px;padding:16px}.stat b{font-size:27px;display:block}.stat span{font-size:11px;color:#8a97aa}
+.detail-links{display:flex;gap:10px;flex-wrap:wrap}.detail-links a{background:#f5f8fa;border-radius:12px;padding:12px 15px;font-weight:900}
+.details-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.primary{background:#28ae73!important;color:#fff!important}.secondary{background:#fff!important;border:1px solid #dfe5ec!important}
+.details-footer{margin-top:45px;text-align:center;font-size:10px;line-height:1.8;color:#d9ebca;background:#4d812a;padding:16px 20px 20px;border-radius:18px}
+
+
+/* =========================================================
+   V12 — Full Pokémon-style portfolio footer
+   ========================================================= */
+.footer{
+  position:relative;
+  margin:88px calc(50% - 50vw) -70px;
+  width:100vw;
+  padding:0;
+  overflow:hidden;
+  text-align:left;
+  color:#dceccf;
+  background:#315f25;
+  border-top:0;
+  border-radius:28px 28px 0 0;
+  box-shadow:0 -18px 45px rgba(38,78,35,.10);
+  font-size:12px;
+  line-height:1.6;
+}
+.footer:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:9px;
+  background:repeating-linear-gradient(
+    105deg,
+    rgba(255,255,255,.16) 0 2px,
+    transparent 2px 24px
+  );
+  opacity:.8;
+}
+.footer::after{
+  content:"";
+  position:absolute;
+  left:-5%;right:-5%;top:0;
+  height:4px;
+  background:linear-gradient(90deg,#79bd42,#a5d85d,#79bd42);
+  opacity:.9;
+}
+.footer-grass{
+  position:relative;
+  height:72px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 60%,rgba(255,255,255,.20) 0 2px,transparent 3px),
+    radial-gradient(circle at 34% 72%,rgba(255,255,255,.16) 0 2px,transparent 3px),
+    radial-gradient(circle at 68% 58%,rgba(255,255,255,.20) 0 2px,transparent 3px),
+    radial-gradient(circle at 88% 75%,rgba(255,255,255,.16) 0 2px,transparent 3px),
+    linear-gradient(180deg,#6fae36,#4d8429);
+}
+.footer-grass:before{
+  content:"";
+  position:absolute;
+  inset:15px 0 0;
+  background:repeating-linear-gradient(
+    78deg,
+    transparent 0 25px,
+    rgba(30,83,30,.28) 26px 28px
+  );
+  transform-origin:50% 100%;
+  animation:footerGrassBreeze 4.5s ease-in-out infinite alternate;
+}
+.footer-grass:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:-2px;
+  height:24px;
+  background:linear-gradient(180deg,transparent,#315f25);
+}
+@keyframes footerGrassBreeze{
+  from{transform:skewX(0deg) translateX(0)}
+  to{transform:skewX(-.7deg) translateX(-5px)}
+}
+.footer-inner{
+  position:relative;
+  z-index:2;
+  max-width:1160px;
+  margin:0 auto;
+  padding:38px 28px 22px;
+}
+.footer-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  padding-bottom:30px;
+  border-bottom:1px solid rgba(230,245,218,.16);
+}
+.footer-kicker{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:7px;
+  color:#a9d67c;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.footer-pokeball{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid #fff;
+  background:linear-gradient(#f04a42 0 44%,#fff 44% 56%,#1d2830 56%);
+  position:relative;
+  flex:none;
+}
+.footer-pokeball:after{
+  content:"";
+  position:absolute;
+  width:5px;height:5px;
+  left:4.5px;top:4.5px;
+  border-radius:50%;
+  background:#fff;
+  border:1px solid #24302f;
+}
+.footer-title{
+  margin:0;
+  color:#fff;
+  font-size:27px;
+  line-height:1.15;
+  font-weight:950;
+  letter-spacing:-.4px;
+}
+.footer-copy{
+  margin:8px 0 0;
+  max-width:600px;
+  color:#c6ddb7;
+  font-size:13px;
+}
+.footer-hello{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  background:#2ab477;
+  color:#fff;
+  padding:13px 21px;
+  border-radius:999px;
+  font-weight:900;
+  box-shadow:0 9px 24px rgba(17,48,26,.24);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.footer-hello:hover{
+  transform:translateY(-3px);
+  box-shadow:0 13px 30px rgba(17,48,26,.30);
+}
+.footer-columns{
+  display:grid;
+  grid-template-columns:1.35fr 1fr 1fr;
+  gap:42px;
+  padding:30px 0;
+}
+.footer-brand strong{
+  display:block;
+  color:#fff;
+  font-size:16px;
+  margin-bottom:5px;
+}
+.footer-brand span{
+  color:#a9d19a;
+  font-size:11px;
+}
+.footer-heading{
+  margin:0 0 12px;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.footer-links{
+  display:grid;
+  gap:7px;
+}
+.footer-links a{
+  color:#cce2c2;
+  font-size:12px;
+  transition:color .18s ease,transform .18s ease;
+}
+.footer-links a:hover{
+  color:#fff;
+  transform:translateX(3px);
+}
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding-top:18px;
+  border-top:1px solid rgba(230,245,218,.16);
+  color:#a9c99a;
+  font-size:10px;
+}
+.footer-bottom-left{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 16px;
+}
+.footer-bottom strong{color:#fff}
+.footer-top-link{
+  color:#d8ebcd!important;
+  font-weight:900;
+  white-space:nowrap;
+}
+.footer-top-link:hover{transform:translateY(-1px)!important}
+.footer-pokeballs{
+  position:absolute;
+  right:6%;
+  bottom:12px;
+  display:flex;
+  gap:8px;
+  opacity:.16;
+  pointer-events:none;
+}
+.footer-pokeballs span{
+  width:14px;height:14px;border:2px solid #fff;border-radius:50%;
+  background:linear-gradient(#ef4b43 0 44%,#fff 44% 56%,#172238 56%);
+}
+.footer-pokeballs span:nth-child(2){transform:translateY(-8px) scale(.78)}
+.footer-pokeballs span:nth-child(3){transform:translateY(2px) scale(.62)}
+@media(max-width:700px){
+  .footer{
+    margin-top:65px;
+    border-radius:22px 22px 0 0;
+  }
+  .footer-inner{padding:32px 20px 18px}
+  .footer-top{align-items:flex-start;flex-direction:column}
+  .footer-hello{align-self:flex-start}
+  .footer-columns{grid-template-columns:1fr 1fr;gap:26px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:460px){
+  .footer-grass{height:58px}
+  .footer-title{font-size:23px}
+  .footer-columns{grid-template-columns:1fr}
+  .footer-brand{grid-column:auto}
+}
+
+/* ---------- portfolio ---------- */
+#portfolio{background:linear-gradient(180deg,#c9ecfa 0%,#e8f4ee 53%,#dcefcf 100%)}
+.portfolio-grid{display:grid;grid-template-columns:330px 1fr;gap:26px;align-items:start}
+.portfolio-side{
+  background:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow);
+  position:sticky;top:20px;text-align:center
+}
+.portfolio-side .character-box{height:300px}
+.portfolio-side .character-box img{height:90%}
+.portfolio-main{display:grid;gap:18px}
+.portfolio-card{padding:25px}
+.about p{font-size:16px;line-height:1.75;color:#61708f;margin:0 0 17px}
+.exp{display:grid;grid-template-columns:165px 1fr;gap:20px}
+.tabs{border-right:1px solid #e2e7ef;padding-right:13px}
+.tab{padding:11px 12px;color:#a0acc0;font-weight:800;font-size:13px;border-left:2px solid transparent;cursor:pointer}
+.tab.active{color:var(--green);border-left-color:var(--green)}
+.exp-detail h3{font-size:18px;margin:0 0 5px}.exp-detail h3 span{color:var(--green)}
+.meta{font-size:13px;color:#9aa7be;margin-bottom:17px}
+.exp-detail ul{list-style:none;margin:0;padding:0;color:#657492;font-size:14px;line-height:1.65}
+.exp-detail li{margin-bottom:10px;padding-left:19px;position:relative}.exp-detail li:before{content:"›";position:absolute;left:2px;color:#6ec69d;font-weight:900}
+.projects{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.project{border-radius:16px;padding:18px;background:#eaf3df;min-height:155px;transition:transform .2s,box-shadow .2s}
+.project:hover{transform:translateY(-5px);box-shadow:0 14px 28px rgba(45,68,91,.13)}
+.project h3{transition:transform .2s ease}.project:hover h3{transform:translateX(2px)}
+.project-arrow{display:inline-block;transition:transform .2s ease}.project:hover .project-arrow{transform:translate(2px,-2px)} .project h3{color:#5120a0}
+.project:nth-child(2){background:#e3f0fa}.project:nth-child(3){background:#f8ead8}.project:nth-child(4){background:#e8f2df}
+.project-no{font-size:10px;color:#9aa9bd;letter-spacing:1px}.project h3{font-size:16px;margin:8px 0 5px}.project p{font-size:13px;color:#6d7b98;line-height:1.45;margin:0}
+.techs{display:flex;flex-wrap:wrap;gap:8px}.tech{background:#f5f7fa;border:1px solid #e6eaf0;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:800;color:#64728f;transition:transform .18s ease,box-shadow .18s ease}
+.tech:hover{transform:translateY(-2px);box-shadow:0 7px 16px rgba(45,68,91,.08)}
+.edu{display:flex;justify-content:space-between;gap:20px;color:#657492}.edu strong{color:var(--navy)}
+.portfolio-bottom{text-align:center;padding:70px 20px 0}.portfolio-bottom h2{font-size:20px;margin:0 0 8px}.portfolio-bottom p{font-size:14px;color:#7b89a1;margin:0 0 18px}
+.cta{display:inline-block;background:#28ae73;color:#fff;padding:13px 23px;border-radius:999px;font-weight:900;box-shadow:0 10px 25px rgba(42,175,116,.25)}
+.footer{
+  margin:70px -20px -70px;text-align:center;background:#4d812a;color:#d9ebca;
+  position:relative;overflow:hidden;
+
+  padding:28px 20px 20px;font-size:10px;line-height:1.8;border-top:5px solid #79b63c
+}
+.footer:before{
+  content:"";position:absolute;left:0;right:0;top:-5px;height:12px;
+  background:repeating-linear-gradient(110deg,transparent 0 18px,rgba(255,255,255,.16) 19px 21px);opacity:.5;
+}
+.footer strong{color:#fff}
+
+.reveal{opacity:0;transform:translateY(12px);transition:.6s ease}.reveal.show{opacity:1;transform:none}
+
+@media(max-width:850px){
+  .page-wrap{padding:18px 14px 50px}.details-grid,.portfolio-grid{grid-template-columns:1fr}
+  .details-profile,.portfolio-side{position:relative;top:0;max-width:520px;margin:auto}
+  .exp{grid-template-columns:1fr}.tabs{display:flex;overflow:auto;border-right:0;border-bottom:1px solid #e2e7ef;padding:0}
+  .tab{white-space:nowrap;border-left:0;border-bottom:2px solid transparent}.tab.active{border-bottom-color:var(--green)}
+}
+@media(max-width:560px){
+  .projects{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}
+  .character-box{height:300px}.portfolio-side .character-box{height:250px}
+  .card-title{font-size:19px}.ball{min-width:270px;min-height:270px}
+}
+
+/* ===== V6: one-page portfolio after the ball opens ===== */
+.single-page-scene{
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255,255,255,.28), transparent 30%),
+    linear-gradient(180deg,#bceaf8 0%,#dff3ef 48%,#d8efcc 100%);
+}
+.single-page-grid{
+  grid-template-columns:330px minmax(0,1fr);
+  gap:26px;
+}
+.single-sidebar{
+  position:sticky;
+  top:22px;
+}
+.single-content{gap:18px}
+.green-link{color:var(--green);font-weight:900}
+.project-arrow{float:right}
+.visitor-note{
+  margin-top:12px;
+  font-size:12px;
+  color:#8a98aa;
+  font-weight:700
+}
+.single-footer{padding-top:85px}
+
+/* Slow moving sky gradient to get the blue -> green progression feeling */
+.single-page-scene{
+  background-size:100% 160%;
+  animation:pageGradient 18s ease-in-out infinite alternate;
+}
+@keyframes pageGradient{
+  0%{background-position:50% 0%}
+  100%{background-position:50% 100%}
+}
+
+/* Clouds drift across the page */
+.single-page-scene .cloud{
+  animation:cloudDrift 12s ease-in-out infinite alternate;
+}
+.single-page-scene .cloud.two{animation-duration:10s}
+.single-page-scene .cloud.three{animation-duration:14s}
+@keyframes cloudDrift{
+  from{transform:translateX(-18px)}
+  to{transform:translateX(34px)}
+}
+.single-page-scene .cloud.three{
+  transform:scale(.85);
+}
+@keyframes cloudDriftThree{
+  from{transform:translateX(-18px) scale(.85)}
+  to{transform:translateX(34px) scale(.85)}
+}
+.single-page-scene .cloud.three{animation-name:cloudDriftThree}
+
+/* Character: subtle but visible idle movement */
+.character-box img{
+  animation:characterIdle 3.8s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes characterIdle{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  18%{transform:translate3d(-2px,-2px,0) rotate(-.35deg) scale(1.002)}
+  42%{transform:translate3d(1px,-8px,0) rotate(.55deg) scale(1.007)}
+  65%{transform:translate3d(3px,-4px,0) rotate(.30deg) scale(1.004)}
+  82%{transform:translate3d(-1px,-1px,0) rotate(-.2deg) scale(1.001)}
+}
+.character-box:after{
+  content:"";
+  position:absolute;
+  left:26%;
+  right:26%;
+  bottom:5px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(46,79,34,.13);
+  filter:blur(5px);
+  animation:characterShadow 3.8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes characterShadow{
+  0%,100%{transform:scaleX(1);opacity:.13}
+  42%{transform:scaleX(.88);opacity:.08}
+  65%{transform:scaleX(.94);opacity:.1}
+}
+
+/* Keep the cards visually close to the reference page */
+.details-card{
+  padding:25px 27px;
+}
+.details-grid{
+  align-items:start;
+}
+.projects{
+  grid-template-columns:1fr 1fr;
+}
+
+/* No second page / next-step UI */
+#portfolio,.details-actions{display:none!important}
+
+@media(max-width:850px){
+  .single-page-grid{grid-template-columns:1fr}
+  .single-sidebar{position:relative;top:0;max-width:520px;margin:auto}
+}
+@media(max-width:560px){
+  .projects{grid-template-columns:1fr}
+}
+
+/* Respect reduced motion */
+@media(prefers-reduced-motion: reduce){
+  .single-page-scene,.single-page-scene .cloud,.character-box img{
+    animation:none!important;
+  }
+}
+
+
+/* =========================================================
+   V13 — Footer layout repair
+   The footer is a viewport-wide section, independent of the
+   centered portfolio content column.
+   ========================================================= */
+html,body{overflow-x:hidden}
+
+#details .page-wrap{
+  overflow:visible;
+}
+
+#details .footer{
+  position:relative;
+  left:50%;
+  width:100vw;
+  margin:88px 0 -70px;
+  transform:translateX(-50%);
+  padding:0;
+  text-align:left;
+  overflow:hidden;
+  border-radius:30px 30px 0 0;
+  background:#315f25;
+  color:#dceccf;
+  box-shadow:0 -20px 55px rgba(38,78,35,.12);
+  font-size:12px;
+  line-height:1.6;
+  isolation:isolate;
+}
+
+#details .footer:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 8% 20%,rgba(255,255,255,.08) 0 1px,transparent 2px),
+    radial-gradient(circle at 72% 35%,rgba(255,255,255,.06) 0 1px,transparent 2px);
+  background-size:100px 100px,140px 140px;
+}
+
+#details .footer:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:5px;
+  z-index:4;
+  background:linear-gradient(90deg,#75b73d,#b0dc65,#75b73d);
+}
+
+#details .footer-grass{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:82px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 9% 72%,rgba(255,255,255,.18) 0 2px,transparent 3px),
+    radial-gradient(circle at 31% 58%,rgba(255,255,255,.14) 0 2px,transparent 3px),
+    radial-gradient(circle at 57% 76%,rgba(255,255,255,.18) 0 2px,transparent 3px),
+    radial-gradient(circle at 84% 55%,rgba(255,255,255,.15) 0 2px,transparent 3px),
+    linear-gradient(180deg,#70ad38,#4d8429);
+}
+
+#details .footer-grass:before{
+  content:"";
+  position:absolute;
+  inset:12px -2% 0;
+  background:repeating-linear-gradient(
+    78deg,
+    transparent 0 27px,
+    rgba(28,82,30,.30) 28px 30px
+  );
+  transform-origin:50% 100%;
+  animation:footerGrassBreezeV13 3.8s ease-in-out infinite alternate;
+}
+
+#details .footer-grass:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:-1px;
+  height:27px;
+  background:linear-gradient(180deg,transparent,#315f25);
+}
+
+@keyframes footerGrassBreezeV13{
+  from{transform:skewX(.2deg) translateX(0)}
+  to{transform:skewX(-.8deg) translateX(-7px)}
+}
+
+#details .footer-inner{
+  position:relative;
+  z-index:3;
+  width:min(1120px,calc(100% - 48px));
+  margin:0 auto;
+  padding:42px 0 24px;
+}
+
+#details .footer-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:42px;
+  padding:0 0 30px;
+  border-bottom:1px solid rgba(235,248,224,.18);
+}
+
+#details .footer-kicker{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 9px;
+  color:#b8dd8c;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+#details .footer-pokeball{
+  width:18px;
+  height:18px;
+  flex:none;
+  position:relative;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:linear-gradient(#ef4b43 0 44%,#fff 44% 56%,#1c2730 56%);
+}
+
+#details .footer-pokeball:after{
+  content:"";
+  position:absolute;
+  width:5px;height:5px;
+  left:4.5px;top:4.5px;
+  border-radius:50%;
+  background:#fff;
+  border:1px solid #24302f;
+}
+
+#details .footer-title{
+  margin:0;
+  color:#fff;
+  font-size:29px;
+  line-height:1.12;
+  font-weight:950;
+  letter-spacing:-.5px;
+}
+
+#details .footer-copy{
+  margin:8px 0 0;
+  max-width:650px;
+  color:#c7ddb8;
+  font-size:13px;
+  line-height:1.65;
+}
+
+#details .footer-hello{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  padding:13px 22px;
+  border-radius:999px;
+  background:#2ab477;
+  color:#fff;
+  font-weight:900;
+  box-shadow:0 10px 25px rgba(12,46,25,.25);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+
+#details .footer-hello:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 30px rgba(12,46,25,.32);
+}
+
+#details .footer-columns{
+  display:grid;
+  grid-template-columns:1.55fr .75fr .75fr;
+  gap:64px;
+  padding:32px 0;
+}
+
+#details .footer-brand strong{
+  display:block;
+  margin-bottom:5px;
+  color:#fff;
+  font-size:17px;
+}
+
+#details .footer-brand span{
+  color:#aed19e;
+  font-size:11px;
+}
+
+#details .footer-brand .footer-copy{
+  max-width:430px;
+  margin-top:12px;
+}
+
+#details .footer-heading{
+  margin:0 0 13px;
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+}
+
+#details .footer-links{
+  display:grid;
+  gap:8px;
+}
+
+#details .footer-links a{
+  width:max-content;
+  color:#cfe2c5;
+  font-size:12px;
+  transition:color .18s ease,transform .18s ease;
+}
+
+#details .footer-links a:hover{
+  color:#fff;
+  transform:translateX(4px);
+}
+
+#details .footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding-top:19px;
+  border-top:1px solid rgba(235,248,224,.18);
+  color:#a9ca9a;
+  font-size:10px;
+}
+
+#details .footer-bottom-left{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+}
+
+#details .footer-bottom strong{color:#fff}
+
+#details .footer-top-link{
+  color:#e0efd7!important;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+#details .footer-pokeballs{
+  position:absolute;
+  right:5%;
+  bottom:17px;
+  z-index:1;
+  display:flex;
+  gap:9px;
+  opacity:.14;
+  pointer-events:none;
+}
+
+#details .footer-pokeballs span{
+  width:15px;height:15px;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:linear-gradient(#ef4b43 0 44%,#fff 44% 56%,#172238 56%);
+}
+
+@media(max-width:700px){
+  #details .footer{
+    margin-top:65px;
+    border-radius:24px 24px 0 0;
+  }
+  #details .footer-inner{
+    width:calc(100% - 36px);
+    padding:34px 0 20px;
+  }
+  #details .footer-top{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:22px;
+  }
+  #details .footer-title{font-size:25px}
+  #details .footer-hello{align-self:flex-start}
+  #details .footer-columns{
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  #details .footer-brand{grid-column:1/-1}
+}
+
+@media(max-width:460px){
+  #details .footer-grass{height:62px}
+  #details .footer-columns{grid-template-columns:1fr}
+  #details .footer-brand{grid-column:auto}
+  #details .footer-bottom{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  #details .footer-title{font-size:23px}
+}
+
+
+/* =========================================================
+   V14 — Compact Pokémon footer
+   Full-width, short, visual, and intentionally lighter than
+   the portfolio content above.
+   ========================================================= */
+#details .footer{
+  position:relative;
+  left:50%;
+  width:100vw;
+  margin:56px 0 -70px;
+  transform:translateX(-50%);
+  overflow:hidden;
+  border-radius:24px 24px 0 0;
+  background:#477d28;
+  color:#e8f3df;
+  box-shadow:0 -12px 38px rgba(42,88,37,.10);
+  font-size:11px;
+  line-height:1.45;
+  isolation:isolate;
+}
+
+#details .footer:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 60%,rgba(255,255,255,.10) 0 1px,transparent 2px),
+    radial-gradient(circle at 64% 35%,rgba(255,255,255,.08) 0 1px,transparent 2px),
+    linear-gradient(180deg,rgba(92,151,45,.20),transparent 35%);
+}
+
+#details .footer-pokemon-strip{
+  position:relative;
+  z-index:3;
+  height:52px;
+  overflow:hidden;
+  border-top:3px solid #72ad3c;
+  border-bottom:3px solid rgba(34,82,30,.32);
+  background:
+    linear-gradient(180deg,#70ad39 0%,#5b982f 65%,#477d28 100%);
+}
+
+#details .footer-pokemon-strip:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:15px;
+  background:repeating-linear-gradient(
+    78deg,
+    transparent 0 24px,
+    rgba(25,75,28,.25) 25px 27px
+  );
+  transform-origin:bottom;
+  animation:footerGrassV14 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes footerGrassV14{
+  from{transform:skewX(.2deg) translateX(0)}
+  to{transform:skewX(-.6deg) translateX(-6px)}
+}
+
+#details .footer-pokemon-track{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-2px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-around;
+  gap:12px;
+  min-width:760px;
+  height:55px;
+  padding:0 12px;
+  opacity:.95;
+  animation:footerPokemonDriftV14 26s linear infinite;
+}
+
+#details .footer-pokemon-track img{
+  display:block;
+  width:46px;
+  height:46px;
+  object-fit:contain;
+  image-rendering:auto;
+  filter:drop-shadow(0 3px 2px rgba(24,61,27,.22));
+  flex:0 0 auto;
+}
+
+@keyframes footerPokemonDriftV14{
+  from{transform:translateX(0)}
+  to{transform:translateX(-90px)}
+}
+
+#details .footer-compact-inner{
+  position:relative;
+  z-index:2;
+  width:min(1120px,calc(100% - 48px));
+  margin:0 auto;
+  min-height:86px;
+  display:grid;
+  grid-template-columns:1.4fr 1fr .8fr;
+  align-items:center;
+  gap:35px;
+  padding:17px 0 14px;
+  border-bottom:1px solid rgba(240,250,232,.18);
+}
+
+#details .footer-compact-brand strong{
+  display:block;
+  color:#fff;
+  font-size:16px;
+  line-height:1.2;
+  margin-bottom:4px;
+}
+
+#details .footer-compact-brand span{
+  color:#c8dfba;
+  font-size:10px;
+}
+
+#details .footer-compact-links,
+#details .footer-compact-connect{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 17px;
+}
+
+#details .footer-compact-links a,
+#details .footer-compact-connect a{
+  color:#dcebd3;
+  font-size:10px;
+  transition:color .18s ease,transform .18s ease;
+}
+
+#details .footer-compact-links a:hover,
+#details .footer-compact-connect a:hover{
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+#details .footer-compact-connect{
+  justify-content:flex-end;
+}
+
+#details .footer-compact-bottom{
+  position:relative;
+  z-index:2;
+  width:min(1120px,calc(100% - 48px));
+  min-height:38px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  color:#bcd4ae;
+  font-size:9px;
+}
+
+#details .footer-compact-bottom a{
+  color:#eef8e9;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+@media(max-width:800px){
+  #details .footer-compact-inner{
+    grid-template-columns:1fr;
+    gap:10px;
+    padding:15px 0;
+  }
+  #details .footer-compact-connect{
+    justify-content:flex-start;
+  }
+  #details .footer-compact-bottom{
+    min-height:48px;
+    align-items:flex-start;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    padding:8px 0;
+  }
+}
+
+@media(max-width:520px){
+  #details .footer{
+    margin-top:42px;
+    border-radius:20px 20px 0 0;
+  }
+  #details .footer-pokemon-strip{height:46px}
+  #details .footer-pokemon-track{
+    gap:7px;
+    min-width:680px;
+  }
+  #details .footer-pokemon-track img{
+    width:39px;
+    height:39px;
+  }
+  #details .footer-compact-inner,
+  #details .footer-compact-bottom{
+    width:calc(100% - 30px);
+  }
+}
+
+
+/* =========================================================
+   V15 — ultra-compact Pokémon footer
+   No personal profile information. Dense moving sprite row.
+   ========================================================= */
+#details .footer-v15{
+  margin-top:38px !important;
+  margin-bottom:-70px !important;
+  padding:0 !important;
+  border-radius:20px 20px 0 0 !important;
+  overflow:hidden;
+  background:#477d28 !important;
+  color:#dcebd3;
+}
+
+#details .footer-v15 .footer-pokemon-strip{
+  height:54px !important;
+  border-top:3px solid #78b744 !important;
+  border-bottom:2px solid rgba(28,67,25,.35) !important;
+  background:linear-gradient(180deg,#70ad39,#548d2b) !important;
+  overflow:hidden;
+}
+
+#details .footer-v15 .footer-pokemon-track{
+  left:0;
+  bottom:-2px;
+  height:56px;
+  width:max-content;
+  min-width:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start !important;
+  gap:3px !important;
+  padding:0 5px !important;
+  animation:footerV15Move 22s linear infinite alternate;
+  will-change:transform;
+}
+
+#details .footer-v15 .footer-pokemon-track img{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  object-fit:contain;
+  margin:0 !important;
+  filter:drop-shadow(0 2px 1px rgba(25,55,22,.24));
+}
+
+@keyframes footerV15Move{
+  from{transform:translateX(0)}
+  to{transform:translateX(calc(-1 * max(0px, (100vw - 100%))) )}
+}
+
+#details .footer-v15-bottom{
+  min-height:28px;
+  width:min(1120px,calc(100% - 28px));
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  font-size:9px;
+  color:#bdd6ae;
+}
+
+#details .footer-v15-bottom span:nth-child(2){
+  opacity:.72;
+}
+
+#details .footer-v15-bottom a{
+  color:#eef8e9;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+@media(max-width:600px){
+  #details .footer-v15{
+    margin-top:28px !important;
+  }
+  #details .footer-v15 .footer-pokemon-strip{
+    height:48px !important;
+  }
+  #details .footer-v15 .footer-pokemon-track{
+    height:50px;
+    gap:1px !important;
+  }
+  #details .footer-v15 .footer-pokemon-track img{
+    width:38px !important;
+    height:38px !important;
+    flex-basis:38px !important;
+  }
+  #details .footer-v15-bottom{
+    min-height:27px;
+    width:calc(100% - 20px);
+    font-size:8px;
+  }
+}
+
+
+/* V20 footer polish — compact strip, clean hover labels, visible legal text. */
+#details .footer-v15{
+  position:relative;
+  z-index:30;
+  margin:34px 0 0 !important;
+  padding:0 !important;
+  height:auto;
+  border-radius:18px 18px 0 0 !important;
+  overflow:visible !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  isolation:isolate;
+}
+#details .footer-v15 .footer-pokemon-strip{
+  position:relative;
+  width:100%;
+  height:58px !important;
+  overflow:visible;
+  border:0 !important;
+  border-top:3px solid #70b33b !important;
+  border-radius:18px 18px 0 0;
+  background:linear-gradient(180deg,#69a935 0%,#4e8a2b 100%);
+  z-index:2;
+}
+#details .footer-v15 .footer-pokemon-strip:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;height:18px;
+  background:repeating-linear-gradient(78deg,transparent 0 23px,rgba(28,77,29,.22) 24px 26px);
+  pointer-events:none;
+  z-index:0;
+  transform-origin:bottom;
+  animation:footerGrassV20 3.8s ease-in-out infinite alternate;
+}
+@keyframes footerGrassV20{
+  from{transform:skewX(.15deg) translateX(0)}
+  to{transform:skewX(-.45deg) translateX(-4px)}
+}
+#details .footer-v15 .footer-pokemon-track{
+  position:absolute;
+  inset:auto 0 0 0;
+  width:max-content;
+  min-width:100%;
+  height:56px;
+  padding:0 2px !important;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start !important;
+  gap:0 !important;
+  animation:footerV20Move 24s linear infinite alternate;
+  will-change:transform;
+  z-index:2;
+}
+/* Two full rows worth of sprites are already in the markup; move the whole crowd gently. */
+@keyframes footerV20Move{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-11%,0,0)}
+}
+#details .footer-v15 .footer-pokemon{
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  width:52px;
+  height:56px;
+  min-width:52px;
+  padding:0;
+  margin:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  flex:0 0 52px;
+  z-index:3;
+}
+#details .footer-v15 .footer-pokemon img{
+  display:block;
+  width:52px !important;
+  height:52px !important;
+  object-fit:contain;
+  margin:0 auto;
+  transform:translateY(3px);
+  transform-origin:center bottom;
+  filter:drop-shadow(0 2px 1px rgba(25,55,22,.25));
+  transition:transform .24s cubic-bezier(.2,.8,.2,1),filter .24s ease;
+  pointer-events:none;
+}
+/* Reference-style navy name bubble: clear, centered and above the sprite. */
+#details .footer-v15 .footer-pokemon::after{
+  content:attr(data-name);
+  position:absolute;
+  left:50%;
+  bottom:57px;
+  transform:translate(-50%,8px);
+  padding:5px 9px 5px;
+  border-radius:999px;
+  background:#273765;
+  color:#fff;
+  font-size:10px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.1px;
+  white-space:nowrap;
+  box-shadow:0 5px 12px rgba(35,49,83,.24);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .15s ease,transform .15s ease;
+  z-index:50;
+}
+/* Small pointer under the name bubble. */
+#details .footer-v15 .footer-pokemon::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:54px;
+  width:7px;
+  height:7px;
+  background:#273765;
+  transform:translate(-50%,7px) rotate(45deg);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .15s ease,transform .15s ease;
+  z-index:49;
+}
+#details .footer-v15 .footer-pokemon:hover::after,
+#details .footer-v15 .footer-pokemon:focus-visible::after,
+#details .footer-v15 .footer-pokemon.is-selected::after{
+  opacity:1;
+  visibility:visible;
+  transform:translate(-50%,0);
+}
+#details .footer-v15 .footer-pokemon:hover::before,
+#details .footer-v15 .footer-pokemon:focus-visible::before,
+#details .footer-v15 .footer-pokemon.is-selected::before{
+  opacity:1;
+  visibility:visible;
+  transform:translate(-50%,1px) rotate(45deg);
+}
+#details .footer-v15 .footer-pokemon:hover img,
+#details .footer-v15 .footer-pokemon:focus-visible img{
+  transform:translateY(-7px) scale(1.05);
+}
+#details .footer-v15 .footer-pokemon.is-selected img{
+  animation:footerPokemonHopV20 .48s cubic-bezier(.2,.85,.3,1) both;
+  filter:drop-shadow(0 6px 3px rgba(25,55,22,.3));
+}
+@keyframes footerPokemonHopV20{
+  0%{transform:translateY(3px) scale(1)}
+  45%{transform:translateY(-15px) scale(1.08)}
+  100%{transform:translateY(-9px) scale(1.05)}
+}
+#details .footer-v15 .footer-pokemon:focus-visible{
+  outline:2px solid rgba(255,255,255,.9);
+  outline-offset:-2px;
+  border-radius:10px;
+}
+#details .footer-v15 .footer-pokemon-name{display:none !important;}
+/* Compact legal area: no profile/personal information. */
+#details .footer-v15 .footer-legal{
+  position:relative;
+  z-index:4;
+  min-height:38px;
+  padding:8px 14px 9px;
+  background:#52822c;
+  color:rgba(255,255,255,.72);
+  text-align:center;
+  font-size:9px;
+  line-height:1.45;
+  border-top:1px solid rgba(255,255,255,.14);
+}
+#details .footer-v15 .footer-legal strong{color:rgba(255,255,255,.9);}
+@media(max-width:900px){
+  #details .footer-v15 .footer-pokemon{width:44px;height:52px;min-width:44px;flex-basis:44px;}
+  #details .footer-v15 .footer-pokemon img{width:46px !important;height:46px !important;}
+  #details .footer-v15 .footer-pokemon::after{font-size:9px;bottom:53px;}
+  #details .footer-v15 .footer-pokemon::before{bottom:50px;}
+}
+@media(max-width:600px){
+  #details .footer-v15{margin-top:28px !important;}
+  #details .footer-v15 .footer-pokemon-strip{height:52px !important;border-radius:15px 15px 0 0;}
+  #details .footer-v15 .footer-pokemon-track{height:50px;}
+  #details .footer-v15 .footer-pokemon{height:50px;width:40px;min-width:40px;flex-basis:40px;}
+  #details .footer-v15 .footer-pokemon img{width:40px !important;height:40px !important;}
+  #details .footer-v15 .footer-pokemon::after{font-size:8px;bottom:47px;padding:4px 7px;}
+  #details .footer-v15 .footer-pokemon::before{bottom:44px;width:6px;height:6px;}
+  #details .footer-v15 .footer-legal{font-size:8px;min-height:34px;padding:7px 10px 8px;}
+}
+
+/* V21 — exact footer bands: Pokémon strip #7EB646, legal band #52822C. */
+#details .footer-v15{
+  width:100vw !important;
+  left:50% !important;
+  margin:34px 0 0 !important;
+  border:0 !important;
+  transform:translateX(-50%) !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  overflow:visible !important;
+  background:#52822C !important;
+  box-shadow:none !important;
+}
+#details .footer-v15::before{
+  display:none !important;
+  content:none !important;
+}
+#details .footer-v15 .footer-pokemon-strip{
+  width:100% !important;
+  height:58px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-top:0 !important;
+  border-bottom:0 !important;
+  border-radius:0 !important;
+  background:#7EB646 !important;
+  overflow:visible !important;
+}
+#details .footer-v15 .footer-pokemon-track{
+  position:absolute !important;
+  left:0 !important;
+  right:auto !important;
+  bottom:0 !important;
+  height:55px !important;
+  min-width:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  gap:0 !important;
+  align-items:flex-end !important;
+}
+#details .footer-v15 .footer-pokemon{
+  width:52px !important;
+  min-width:52px !important;
+  height:55px !important;
+  flex:0 0 52px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+#details .footer-v15 .footer-pokemon img{
+  width:52px !important;
+  height:52px !important;
+  margin:0 !important;
+  transform:translateY(2px) !important;
+}
+#details .footer-v15 .footer-pokemon-strip:before{
+  background:repeating-linear-gradient(78deg,transparent 0 23px,rgba(47,101,30,.18) 24px 26px) !important;
+}
+#details .footer-v15 .footer-legal{
+  width:100% !important;
+  min-height:38px !important;
+  margin:0 !important;
+  padding:8px 14px 9px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:#52822C !important;
+  color:rgba(255,255,255,.72) !important;
+  text-align:center !important;
+  font-size:9px !important;
+  line-height:1.45 !important;
+}
+@media(max-width:600px){
+  #details .footer-v15{margin-top:28px !important;}
+  #details .footer-v15 .footer-pokemon-strip{height:52px !important;}
+  #details .footer-v15 .footer-pokemon-track{height:50px !important;}
+  #details .footer-v15 .footer-pokemon{height:50px !important;width:42px !important;min-width:42px !important;flex-basis:42px !important;}
+  #details .footer-v15 .footer-pokemon img{width:42px !important;height:42px !important;transform:translateY(1px) !important;}
+  #details .footer-v15 .footer-legal{min-height:34px !important;padding:7px 10px 8px !important;font-size:8px !important;}
+}
+
+/* V24 — landing-page pointer motion + safer responsive hero sizing. */
+#opening .opening-content{
+  justify-content:flex-start;
+  padding:clamp(68px,10vh,104px) 24px 56px;
+  --pointer-shake-x:0px;
+  --pointer-shake-y:0px;
+  translate:var(--pointer-shake-x) var(--pointer-shake-y);
+  will-change:translate;
+}
+#opening .opening-title{flex:none;margin-bottom:8px}
+#opening .opening-sub{flex:none;margin-bottom:10px}
+#opening .ball-float{flex:none;margin-top:2px}
+#opening .ball{
+  width:min(42vw,56vh,520px);
+  height:min(42vw,56vh,520px);
+  min-width:280px;
+  min-height:280px;
+}
+#opening .open-btn{margin-top:14px}
+#opening .opening-foot{bottom:22px}
+#opening .opening-mountains,
+#opening .opening-hills,
+#opening .opening-grass,
+#opening .opening-parallax,
+#opening .opening-cloud{
+  translate:var(--pointer-shake-x,0px) var(--pointer-shake-y,0px);
+  will-change:translate;
+}
+#opening .opening-mountains{--pointer-shake-x:0px;--pointer-shake-y:0px}
+#opening .opening-hills{--pointer-shake-x:0px;--pointer-shake-y:0px}
+#opening .opening-grass{--pointer-shake-x:0px;--pointer-shake-y:0px}
+#opening .opening-parallax{--pointer-shake-x:0px;--pointer-shake-y:0px}
+#opening .opening-cloud{--pointer-shake-x:0px;--pointer-shake-y:0px}
+@media(max-width:900px){
+  #opening .ball{width:min(58vw,54vh,480px);height:min(58vw,54vh,480px)}
+}
+@media(max-width:560px){
+  #opening .opening-content{padding-top:58px;padding-bottom:48px}
+  #opening .ball{width:min(78vw,48vh,390px);height:min(78vw,48vh,390px);min-width:250px;min-height:250px}
+  #opening .open-btn{margin-top:12px;padding:11px 22px;font-size:12px}
+  #opening .opening-foot{bottom:16px;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .opening-content,
+  #opening .opening-mountains,
+  #opening .opening-hills,
+  #opening .opening-grass,
+  #opening .opening-parallax,
+  #opening .opening-cloud{translate:none!important}
+}
+
+
+/* V26 — minimal opening copy: title, subtitle, and CTA only. */
+#opening .opening-foot{display:none !important;}
+#opening .open-btn{margin-top:18px;}
+
+/* V25 — larger hero ball, organic multidirectional floating, and a clean Pokéball split transition. */
+#opening .ball{
+  width:min(50vw,62vh,600px);
+  height:min(50vw,62vh,600px);
+  min-width:320px;
+  min-height:320px;
+}
+#opening .ball-float{
+  animation:ballFloatV25 5.8s cubic-bezier(.45,.05,.55,.95) infinite;
+  will-change:transform;
+}
+#opening .ball-float::after{
+  animation:ballShadowV25 5.8s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+@keyframes ballFloatV25{
+  0%,100%{transform:translate3d(0,0,0) rotate(-.2deg)}
+  16%{transform:translate3d(-7px,-8px,0) rotate(-.45deg)}
+  34%{transform:translate3d(8px,-15px,0) rotate(.35deg)}
+  52%{transform:translate3d(13px,2px,0) rotate(.55deg)}
+  70%{transform:translate3d(-8px,11px,0) rotate(-.35deg)}
+  86%{transform:translate3d(-13px,-3px,0) rotate(-.55deg)}
+}
+@keyframes ballShadowV25{
+  0%,100%{transform:scaleX(1);opacity:.18}
+  34%{transform:scaleX(.84);opacity:.10}
+  52%{transform:scaleX(.9);opacity:.13}
+  70%{transform:scaleX(.82);opacity:.10}
+}
+/* Opening starts at the centre seam, then the two halves travel upward/downward cleanly. */
+#opening.opening-out .ball-top{
+  transform:translate3d(-2vw,-64vh,0) rotate(-5deg) scale(.99);
+}
+#opening.opening-out .ball-bottom{
+  transform:translate3d(2vw,64vh,0) rotate(5deg) scale(.99);
+}
+#opening.opening-out .ball-center{
+  transform:translate(-50%,-50%) scale(2.35);
+}
+@media(max-width:900px){
+  #opening .ball{width:min(62vw,58vh,520px);height:min(62vw,58vh,520px)}
+}
+@media(max-width:560px){
+  #opening .ball{width:min(82vw,50vh,420px);height:min(82vw,50vh,420px);min-width:250px;min-height:250px}
+}
+
+/* V25 footer names sit above the character strip, never behind the legal band. */
+#details .footer-v15 .footer-pokemon-strip{
+  position:relative !important;
+  z-index:5 !important;
+}
+#details .footer-v15 .footer-legal{
+  position:relative !important;
+  z-index:1 !important;
+}
+#details .footer-v15 .footer-pokemon-track{
+  z-index:8 !important;
+}
+#details .footer-v15 .footer-pokemon::after,
+#details .footer-v15 .footer-pokemon::before{
+  z-index:20 !important;
+}
+
+/* V22 — remove the extra background below the footer. Footer is the final element. */
+#details .page-wrap{
+  padding-bottom:0 !important;
+}
+#details .single-page-scene{
+  padding-bottom:0 !important;
+}
+#details .footer-v15{
+  margin-bottom:0 !important;
+}
+
+/* V27 — final micro-fix: tighten only the green space above the Pokémon heads. */
+#details .footer-v15 .footer-pokemon-strip{
+  height:54px !important;
+}
+#details .footer-v15 .footer-pokemon-track{
+  height:54px !important;
+}
+#details .footer-v15 .footer-pokemon{
+  height:54px !important;
+}
+
+/* =========================================================
+   V29 — cloud + character cleanup
+   Scoped changes only: CTA + profile character.
+   Footer and its hover-name behavior are intentionally untouched.
+   ========================================================= */
+
+/* Recruiter-friendly email CTA: subtle pulse + directional cue */
+.cta-email{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  isolation:isolate;
+  overflow:visible;
+  min-width:178px;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),
+             box-shadow .22s ease;
+  animation:ctaBreathV28 2.8s ease-in-out infinite;
+}
+.cta-email::before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border:2px solid rgba(40,174,115,.24);
+  border-radius:999px;
+  opacity:0;
+  transform:scale(.94);
+  pointer-events:none;
+  z-index:-1;
+  animation:ctaRingV28 2.8s ease-out infinite;
+}
+.cta-email:hover,
+.cta-email:focus-visible{
+  transform:translateY(-3px) scale(1.025);
+  box-shadow:0 14px 30px rgba(42,175,116,.34);
+  animation-play-state:paused;
+}
+.cta-email:active{
+  transform:translateY(-1px) scale(.99);
+}
+.cta-arrow{
+  display:inline-block;
+  font-size:1.05em;
+  line-height:1;
+  transform:translate3d(0,0,0);
+  transition:transform .22s ease;
+}
+.cta-email:hover .cta-arrow,
+.cta-email:focus-visible .cta-arrow{
+  transform:translate3d(4px,-4px,0);
+}
+@keyframes ctaBreathV28{
+  0%,100%{transform:translateY(0);box-shadow:0 10px 25px rgba(42,175,116,.25)}
+  50%{transform:translateY(-2px);box-shadow:0 13px 29px rgba(42,175,116,.31)}
+}
+@keyframes ctaRingV28{
+  0%,42%{opacity:0;transform:scale(.94)}
+  16%{opacity:1}
+  55%,100%{opacity:0;transform:scale(1.12)}
+}
+
+/* Character: smooth, grounded idle motion with no colored overlay */
+.character-box{
+  overflow:hidden;
+  isolation:isolate;
+}
+.character-box img{
+  position:relative;
+  z-index:2;
+  display:block;
+  transform-origin:50% 100%;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform;
+  mix-blend-mode:normal;
+  background:transparent;
+  animation:characterIdleV28 4.4s cubic-bezier(.45,.05,.55,.95) infinite;
+  filter:drop-shadow(0 7px 5px rgba(31,65,27,.13));
+}
+@keyframes characterIdleV28{
+  0%,100%{transform:translate3d(0,-35px,0) rotate(0deg) scale(1)}
+  18%{transform:translate3d(-1px,-37px,0) rotate(-.18deg) scale(1.001)}
+  40%{transform:translate3d(1.5px,-40px,0) rotate(.28deg) scale(1.003)}
+  58%{transform:translate3d(2px,-38px,0) rotate(.18deg) scale(1.002)}
+  78%{transform:translate3d(-1px,-36px,0) rotate(-.12deg) scale(1.001)}
+}
+/* Keep the ground visually stable while the character floats. */
+.character-box::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  width:34%;
+  height:10px;
+  border-radius:50%;
+  background:rgba(42,76,30,.12);
+  filter:blur(7px);
+  transform:translateX(-50%) scaleX(1);
+  z-index:1;
+  pointer-events:none;
+  animation:characterShadowV28 4.4s ease-in-out infinite;
+}
+@keyframes characterShadowV28{
+  0%,100%{opacity:.13;transform:translateX(-50%) scaleX(1)}
+  40%{opacity:.08;transform:translateX(-50%) scaleX(.88)}
+  58%{opacity:.10;transform:translateX(-50%) scaleX(.93)}
+}
+
+/* Slightly livelier clouds on the details page */
+.single-page-scene .cloud.one{animation-duration:5.5s}
+.single-page-scene .cloud.two{animation-duration:6s}
+.single-page-scene .cloud.three{animation-duration:7s}
+
+@media (prefers-reduced-motion:reduce){
+  .cta-email,.cta-email::before,.character-box img,.character-box::after{
+    animation:none!important;
+  }
+  .cta-email:hover,.cta-email:focus-visible{
+    transform:none;
+  }
+}
+
+/* V31 — final Pokemon-theme polish. Visual refinements only; portfolio copy preserved. */
+:root{
+  --pokemon-blue:#3d7dca;
+  --pokemon-red:#e3350d;
+  --pokemon-yellow:#ffcb05;
+}
+
+/* Faster, layered cloud motion without becoming distracting. */
+.single-page-scene .cloud.one{animation-duration:7.5s!important;}
+.single-page-scene .cloud.two{animation-duration:9s!important;}
+.single-page-scene .cloud.three{animation-duration:10.5s!important;}
+
+/* Premium but restrained section/card interaction. */
+.details-card,.details-profile{
+  transform:translateZ(0);
+  transition:transform .28s cubic-bezier(.2,.75,.2,1),box-shadow .28s ease;
+}
+.details-card:hover,.details-profile:hover{
+  transform:translateY(-3px);
+  box-shadow:0 22px 52px rgba(45,68,91,.14);
+}
+
+/* Cleaner project hover: slight lift + arrow movement, no excessive glow. */
+.details-projects .project{
+  transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease,border-color .24s ease;
+}
+.details-projects .project:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 30px rgba(45,68,91,.13);
+  border-color:rgba(61,125,202,.22);
+}
+
+/* Experience tabs feel more like game navigation. */
+.tabs .tab{
+  transition:transform .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease;
+}
+.tabs .tab:hover{transform:translateY(-1px)}
+.tabs .tab.active{box-shadow:0 5px 14px rgba(61,125,202,.13)}
+
+/* Tech chips get a tiny tactile response. */
+.tech{
+  transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+.tech:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 14px rgba(45,68,91,.09);
+}
+
+/* CTA: a gentle traveling highlight tells a recruiter it is interactive. */
+.cta-email{
+  overflow:hidden!important;
+}
+.cta-email::after{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;left:-55%;
+  width:38%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);
+  transform:skewX(-18deg);
+  animation:ctaShineV31 4.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes ctaShineV31{
+  0%,58%{left:-55%;opacity:0}
+  65%{opacity:1}
+  78%,100%{left:125%;opacity:0}
+}
+
+/* Character: grounded shadow and slightly cleaner idle motion. */
+#details .character-box img{
+  animation:characterIdleV31 4.8s cubic-bezier(.45,.05,.55,.95) infinite!important;
+}
+#details .character-box::after{
+  animation:characterShadowV31 4.8s ease-in-out infinite!important;
+}
+@keyframes characterIdleV31{
+  0%,100%{transform:translate3d(0,-4px,0) rotate(0deg) scale(1)}
+  25%{transform:translate3d(-1px,-5px,0) rotate(-.12deg) scale(1.001)}
+  50%{transform:translate3d(1px,-8px,0) rotate(.18deg) scale(1.002)}
+  75%{transform:translate3d(0,-5px,0) rotate(.08deg) scale(1.001)}
+}
+@keyframes characterShadowV31{
+  0%,100%{opacity:.13;transform:translateX(-50%) scaleX(1)}
+  50%{opacity:.08;transform:translateX(-50%) scaleX(.9)}
+}
+
+/* Opening world depth: stronger only when pointer moves, with smooth recovery. */
+#opening .opening-content{transition:translate .12s ease-out}
+#opening .opening-cloud,#opening .opening-mountains,#opening .opening-hills,#opening .opening-grass{
+  transition:translate .16s ease-out;
+}
+
+/* Footer names: guaranteed visual priority above every footer layer. */
+#details .footer-v15 .footer-pokemon-strip{overflow:visible!important;}
+#details .footer-v15 .footer-pokemon-track{overflow:visible!important;}
+#details .footer-v15 .footer-pokemon::after,
+#details .footer-v15 .footer-pokemon::before{pointer-events:none!important;}
+
+/* Mobile: don't let hover lifts make the page feel jumpy. */
+@media(max-width:700px){
+  .details-card:hover,.details-profile:hover{transform:none}
+  .details-projects .project:hover{transform:translateY(-2px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .details-card,.details-profile,.details-projects .project,.tabs .tab,.tech,.cta-email::after,
+  #details .character-box img,#details .character-box::after{animation:none!important;transition:none!important}
+}
+
+/* FINAL OPENING FIX — only hero positioning; footer untouched. */
+#opening .opening-title,
+#opening .opening-sub{display:none!important;}
+
+#opening .ball{
+  width:min(66vw,80vh,680px)!important;
+  height:min(66vw,80vh,680px)!important;
+  min-width:340px!important;
+  min-height:340px!important;
+}
+
+/* Keep the CTA completely below the enlarged ball so its text can never be clipped. */
+#opening .open-btn{
+  position:absolute!important;
+  left:50%!important;
+  bottom:7vh!important;
+  margin:0!important;
+  z-index:50!important;
+  transform:translateX(-50%)!important;
+  white-space:nowrap!important;
+  animation:openCtaFloatFinal 2.8s ease-in-out infinite!important;
+}
+@keyframes openCtaFloatFinal{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-3px)}
+}
+
+@media(max-width:900px){
+  #opening .ball{
+    width:min(78vw,68vh,600px)!important;
+    height:min(78vw,68vh,600px)!important;
+  }
+  #opening .open-btn{bottom:6vh!important;}
+}
+@media(max-width:560px){
+  #opening .ball{
+    width:min(88vw,58vh,500px)!important;
+    height:min(88vw,58vh,500px)!important;
+    min-width:270px!important;
+    min-height:270px!important;
+  }
+  #opening .open-btn{
+    bottom:5vh!important;
+    padding:11px 22px!important;
+    font-size:12px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .open-btn{animation:none!important;transform:translateX(-50%)!important;}
+}
+
+/* FINAL CTA POSITION FIX — only the opening CTA; footer untouched. */
+#opening .open-btn{
+  position:absolute !important;
+  left:50% !important;
+  top:calc(50% + min(32vw, 39vh, 320px) + 18px) !important;
+  bottom:auto !important;
+  margin:0 !important;
+  z-index:60 !important;
+  transform:translateX(-50%) !important;
+  white-space:nowrap !important;
+}
+#opening .ball{
+  width:min(64vw,78vh,640px) !important;
+  height:min(64vw,78vh,640px) !important;
+}
+@media(max-width:900px){
+  #opening .ball{
+    width:min(76vw,66vh,570px) !important;
+    height:min(76vw,66vh,570px) !important;
+  }
+  #opening .open-btn{
+    top:calc(50% + min(38vw, 33vh, 285px) + 16px) !important;
+  }
+}
+@media(max-width:560px){
+  #opening .ball{
+    width:min(84vw,52vh,430px) !important;
+    height:min(84vw,52vh,430px) !important;
+    min-width:250px !important;
+    min-height:250px !important;
+  }
+  #opening .open-btn{
+    top:calc(50% + min(42vw, 26vh, 215px) + 14px) !important;
+    padding:11px 22px !important;
+    font-size:12px !important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .open-btn{transform:translateX(-50%) !important;}
+}
+
+/* V40 — car follows the mountain ridge instead of driving flat across the grass.
+   No other hero/footer elements are changed. */
+#opening .opening-car{
+  bottom:35%;
+  animation:openingCarMountainDrive 18s linear infinite;
+}
+@keyframes openingCarMountainDrive{
+  0%{transform:translate3d(0,10px,0) rotate(1deg) scale(.96)}
+  8%{transform:translate3d(9vw,-18px,0) rotate(-5deg) scale(.97)}
+  16%{transform:translate3d(19vw,-48px,0) rotate(-9deg) scale(.98)}
+  25%{transform:translate3d(30vw,-4px,0) rotate(8deg) scale(.99)}
+  36%{transform:translate3d(43vw,-34px,0) rotate(-5deg) scale(1)}
+  50%{transform:translate3d(58vw,5px,0) rotate(5deg) scale(1)}
+  64%{transform:translate3d(73vw,-38px,0) rotate(-7deg) scale(1.01)}
+  76%{transform:translate3d(87vw,-3px,0) rotate(5deg) scale(1.02)}
+  88%{transform:translate3d(101vw,-28px,0) rotate(-4deg) scale(1.02)}
+  100%{transform:translate3d(125vw,8px,0) rotate(1deg) scale(1.02)}
+}
+@media(max-width:560px){
+  #opening .opening-car{bottom:35%;animation-duration:16s}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .opening-car{animation:none!important}
+}
+
+/* V41 — Day/Night mode. Existing footer styles are intentionally untouched. */
+.theme-toggle{position:fixed;top:18px;right:20px;z-index:10000;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(255,255,255,.86);color:#2e3b67;font-weight:900;font-size:12px;box-shadow:0 8px 24px rgba(35,64,88,.14);backdrop-filter:blur(10px);transition:transform .2s ease,background .25s ease,color .25s ease,box-shadow .2s ease}
+.theme-toggle:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(35,64,88,.18)}.theme-toggle-icon{font-size:15px;line-height:1}
+.opening-moon,.details-moon{position:absolute;pointer-events:none;opacity:0;transition:opacity .5s ease,transform .7s ease}
+.opening-moon{z-index:0;width:76px;height:76px;top:8%;left:9%}
+.details-moon{z-index:1;width:82px;height:82px;top:14px;right:5%}
+.crescent-moon-svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 18px rgba(255,250,202,.55)) drop-shadow(0 0 42px rgba(201,218,255,.20))}
+.opening-stars,.details-stars{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .5s ease;z-index:1}.opening-stars i,.details-stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.85);animation:starTwinkle 2.8s ease-in-out infinite}
+.opening-stars i:nth-child(1){left:18%;top:20%}.opening-stars i:nth-child(2){left:30%;top:13%;width:2px;height:2px;animation-delay:-1.2s}.opening-stars i:nth-child(3){left:42%;top:27%;animation-delay:-.5s}.opening-stars i:nth-child(4){left:58%;top:16%;width:2px;height:2px;animation-delay:-2s}.opening-stars i:nth-child(5){left:69%;top:23%;animation-delay:-1.5s}.opening-stars i:nth-child(6){left:81%;top:12%;width:2px;height:2px;animation-delay:-.7s}.opening-stars i:nth-child(7){left:88%;top:34%;animation-delay:-1.9s}.opening-stars i:nth-child(8){left:12%;top:39%;width:2px;height:2px;animation-delay:-2.4s}.opening-stars i:nth-child(9){left:51%;top:35%;width:2px;height:2px;animation-delay:-.9s}.opening-stars i:nth-child(10){left:76%;top:42%;width:2px;height:2px;animation-delay:-1.7s}
+@keyframes starTwinkle{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.45)}}
+.opening-fireflies{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .5s ease;z-index:2}.opening-fireflies i{position:absolute;width:5px;height:5px;border-radius:50%;background:#e9f5a8;box-shadow:0 0 12px 4px rgba(232,245,139,.55);animation:fireflyFloat 5.5s ease-in-out infinite}.opening-fireflies i:nth-child(1){left:17%;top:58%;animation-delay:-1s}.opening-fireflies i:nth-child(2){left:28%;top:68%;animation-delay:-3.2s}.opening-fireflies i:nth-child(3){left:71%;top:61%;animation-delay:-2s}.opening-fireflies i:nth-child(4){left:82%;top:72%;animation-delay:-4.2s}.opening-fireflies i:nth-child(5){left:61%;top:55%;animation-delay:-.6s}.opening-fireflies i:nth-child(6){left:39%;top:74%;animation-delay:-2.8s}
+@keyframes fireflyFloat{0%,100%{transform:translate(0,0);opacity:.25}30%{transform:translate(12px,-15px);opacity:1}65%{transform:translate(-10px,-28px);opacity:.55}}
+.details-stars i:nth-child(1){left:17%;top:12%}.details-stars i:nth-child(2){left:34%;top:20%;width:2px;height:2px;animation-delay:-1s}.details-stars i:nth-child(3){left:64%;top:10%;animation-delay:-1.8s}.details-stars i:nth-child(4){left:77%;top:25%;width:2px;height:2px;animation-delay:-.4s}.details-stars i:nth-child(5){left:89%;top:13%;animation-delay:-2.4s}.details-stars i:nth-child(6){left:52%;top:17%;width:2px;height:2px;animation-delay:-1.4s}
+body.night-mode .theme-toggle{background:rgba(31,43,68,.88);color:#f6f3d6;border-color:rgba(255,255,255,.15)}
+body.night-mode #opening{background:radial-gradient(ellipse at 50% 25%,rgba(116,173,208,.13),transparent 30%),linear-gradient(180deg,#101d3b 0%,#17385c 32%,#294b58 54%,#405d43 68%,#243d2d 100%)}body.night-mode #opening:after{opacity:.12}
+body.night-mode #opening .opening-sun{opacity:0!important;visibility:hidden}body.night-mode #opening .opening-moon{opacity:.96;transform:translateY(-2px)}body.night-mode #opening .opening-stars,body.night-mode #opening .opening-fireflies{opacity:1}body.night-mode #opening .opening-butterfly{opacity:0;visibility:hidden}
+body.night-mode #opening .opening-cloud,body.night-mode #opening .opening-cloud:before,body.night-mode #opening .opening-cloud:after{background:rgba(225,236,246,.28)}body.night-mode #opening .opening-mountains{opacity:.24}body.night-mode #opening .opening-hills{opacity:.55;filter:saturate(.55) brightness(.65)}body.night-mode #opening .opening-grass,body.night-mode #opening .grass-back,body.night-mode #opening .grass-mid,body.night-mode #opening .grass-front{filter:saturate(.62) brightness(.58)}body.night-mode #opening .open-btn{background:#eef1d8;color:#244b34;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+body.night-mode #details .single-page-scene{background:radial-gradient(circle at 75% 10%,rgba(94,136,176,.16),transparent 24%),linear-gradient(180deg,#15233f 0%,#203c56 46%,#294c4b 100%);animation:none}body.night-mode #details .details-moon{opacity:.96}body.night-mode #details .details-stars{opacity:1}
+body.night-mode #details .cloud,body.night-mode #details .cloud:before,body.night-mode #details .cloud:after{background:rgba(226,235,244,.22)}body.night-mode #details .character-box{background:linear-gradient(#315d79 0 54%,#60734b 54% 87%,#4e7d32 87%)}
+.details-theme-toggle{display:inline-flex;position:fixed;z-index:10000}
+.details-theme-toggle .theme-toggle-icon{font-size:17px}
+body.night-mode .theme-toggle-icon{filter:drop-shadow(0 0 5px rgba(255,244,180,.45))}
+body.night-mode #opening .opening-car .car-light{box-shadow:0 0 7px 2px rgba(255,245,160,.95),0 0 18px 5px rgba(255,245,160,.35)}
+body.night-mode #opening .opening-car{filter:drop-shadow(0 7px 5px rgba(0,0,0,.35))}
+body.night-mode #details .character-box img{filter:drop-shadow(0 5px 8px rgba(0,0,0,.25))}
+body.night-mode #details .single-page-scene:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 8%,rgba(186,211,231,.07),transparent 34%);mix-blend-mode:screen}
+body.night-mode #opening .opening-moon,body.night-mode #details .details-moon{animation:moonDrift 7s ease-in-out infinite}
+@keyframes moonDrift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,5px,0)}}
+@media(max-width:560px){.theme-toggle{top:10px;right:10px;padding:8px 11px;font-size:11px}.opening-moon{width:56px;height:56px;top:7%;left:6%}.details-moon{width:62px;height:62px;top:10px;right:5%}}
+@media(prefers-reduced-motion:reduce){.opening-stars i,.opening-fireflies i,.details-stars i{animation:none!important}}
+
+/* Cinematic Poké Ball opening — opening screen only */
+#opening.cinematic-opening-active::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:30;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.92) 0%,rgba(255,255,255,.48) 7%,rgba(255,255,255,0) 34%);
+  opacity:0;
+  animation:v48-flash .82s ease-out forwards;
+}
+#opening .pokeball,
+#opening .pokeball-wrap{
+  will-change:transform,filter;
+}
+#opening.cinematic-opening-active .pokeball{
+  animation:v48-ball-pulse .42s ease-out both;
+}
+#opening.cinematic-opening-active .pokeball::before{
+  animation:v48-top-open .78s cubic-bezier(.2,.82,.22,1) .18s forwards;
+  transform-origin:50% 100%;
+}
+#opening.cinematic-opening-active .pokeball::after{
+  animation:v48-bottom-open .78s cubic-bezier(.2,.82,.22,1) .18s forwards;
+  transform-origin:50% 0%;
+}
+#opening.cinematic-opening-active .open-btn{
+  animation:v48-button-burst .34s ease-out both;
+}
+@keyframes v48-ball-pulse{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.035)}
+  65%{transform:scale(.985)}
+  100%{transform:scale(1)}
+}
+@keyframes v48-top-open{
+  0%{transform:translateY(0) rotate(0);opacity:1}
+  100%{transform:translateY(-120px) rotate(-5deg);opacity:.12}
+}
+@keyframes v48-bottom-open{
+  0%{transform:translateY(0) rotate(0);opacity:1}
+  100%{transform:translateY(120px) rotate(5deg);opacity:.12}
+}
+@keyframes v48-button-burst{
+  0%{transform:scale(1);opacity:1}
+  55%{transform:scale(1.16);opacity:.95}
+  100%{transform:scale(.72);opacity:0}
+}
+@keyframes v48-flash{
+  0%{opacity:0}
+  36%{opacity:1}
+  100%{opacity:0}
+}
+#opening.cinematic-opening-active .opening-particles{
+  animation:v48-particles .9s ease-out forwards;
+}
+@keyframes v48-particles{
+  0%{opacity:.2;transform:scale(.8)}
+  40%{opacity:1;transform:scale(1.25)}
+  100%{opacity:0;transform:scale(1.8)}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening.cinematic-opening-active::before,
+  #opening.cinematic-opening-active .pokeball,
+  #opening.cinematic-opening-active .pokeball::before,
+  #opening.cinematic-opening-active .pokeball::after,
+  #opening.cinematic-opening-active .open-btn,
+  #opening.cinematic-opening-active .opening-particles{
+    animation:none!important;
+  }
+}
+
+/* V49 — cinematic Poké Ball opening.
+   Scoped only to the opening screen. Footer and portfolio content untouched. */
+
+#opening.opening-out .ball{
+  overflow:visible !important;
+  isolation:isolate;
+  z-index:8;
+  animation:v49BallImpact .48s cubic-bezier(.2,.85,.25,1) both;
+}
+
+#opening.opening-out .ball-half{
+  transition:none !important;
+  will-change:transform,opacity,filter;
+}
+
+#opening.opening-out .ball-top{
+  animation:v49TopHalfOpen 1.02s cubic-bezier(.18,.82,.22,1) .10s forwards !important;
+  z-index:4;
+}
+
+#opening.opening-out .ball-bottom{
+  animation:v49BottomHalfOpen 1.02s cubic-bezier(.18,.82,.22,1) .10s forwards !important;
+  z-index:3;
+}
+
+#opening.opening-out .ball-center{
+  animation:v49CenterRelease .72s cubic-bezier(.2,.8,.2,1) .08s forwards !important;
+}
+
+#opening.opening-out .ball-center::before{
+  animation:v49EnergyBurst .82s cubic-bezier(.16,.8,.2,1) .04s forwards !important;
+}
+
+#opening.opening-out .ball::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:22%;
+  height:22%;
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.25);
+  background:radial-gradient(circle,rgba(255,255,255,.98) 0 12%,rgba(255,255,255,.72) 22%,rgba(255,255,255,0) 68%);
+  opacity:0;
+  pointer-events:none;
+  z-index:20;
+  animation:v49EnergyCore .78s cubic-bezier(.2,.8,.2,1) .02s forwards;
+}
+
+#opening.opening-out .opening-particles{
+  animation:v49Particles .9s ease-out .04s forwards !important;
+}
+
+#opening.opening-out .opening-flash{
+  animation:v49CinematicFlash .82s ease-out .10s forwards !important;
+}
+
+#opening.opening-out .open-btn{
+  animation:v49CtaPulseAway .62s cubic-bezier(.2,.8,.2,1) .04s forwards !important;
+}
+
+@keyframes v49BallImpact{
+  0%{transform:scale(1) rotate(0)}
+  28%{transform:scale(1.045) rotate(-1deg)}
+  55%{transform:scale(.985) rotate(1deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+
+@keyframes v49TopHalfOpen{
+  0%{
+    transform:translate3d(0,0,0) rotate(0deg) scale(1);
+    opacity:1;
+    filter:brightness(1);
+  }
+  24%{
+    transform:translate3d(-8px,-24px,0) rotate(-2deg) scale(1.015);
+    opacity:1;
+    filter:brightness(1.08);
+  }
+  100%{
+    transform:translate3d(-7vw,-68vh,0) rotate(-8deg) scale(.96);
+    opacity:.08;
+    filter:brightness(1.22);
+  }
+}
+
+@keyframes v49BottomHalfOpen{
+  0%{
+    transform:translate3d(0,0,0) rotate(0deg) scale(1);
+    opacity:1;
+  }
+  24%{
+    transform:translate3d(8px,24px,0) rotate(2deg) scale(1.015);
+    opacity:1;
+  }
+  100%{
+    transform:translate3d(7vw,68vh,0) rotate(8deg) scale(.96);
+    opacity:.08;
+  }
+}
+
+@keyframes v49CenterRelease{
+  0%{
+    transform:translate(-50%,-50%) scale(1);
+    opacity:1;
+    filter:brightness(1);
+  }
+  35%{
+    transform:translate(-50%,-50%) scale(1.35);
+    opacity:1;
+    filter:brightness(1.28);
+  }
+  100%{
+    transform:translate(-50%,-50%) scale(2.5);
+    opacity:0;
+    filter:brightness(1.6);
+  }
+}
+
+@keyframes v49EnergyBurst{
+  0%{
+    transform:scale(.35);
+    opacity:0;
+    border-color:rgba(255,255,255,0);
+  }
+  25%{
+    transform:scale(.9);
+    opacity:1;
+    border-color:rgba(255,255,255,.98);
+  }
+  100%{
+    transform:scale(2.55);
+    opacity:0;
+    border-color:rgba(255,255,255,0);
+  }
+}
+
+@keyframes v49EnergyCore{
+  0%{transform:translate(-50%,-50%) scale(.25);opacity:0}
+  28%{transform:translate(-50%,-50%) scale(1.5);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(5.2);opacity:0}
+}
+
+@keyframes v49CinematicFlash{
+  0%{opacity:0;transform:scale(.6)}
+  22%{opacity:.92;transform:scale(.9)}
+  55%{opacity:.48;transform:scale(1.18)}
+  100%{opacity:0;transform:scale(1.55)}
+}
+
+@keyframes v49Particles{
+  0%{opacity:0;transform:scale(.72)}
+  22%{opacity:1;transform:scale(1.05)}
+  100%{opacity:0;transform:scale(1.75)}
+}
+
+@keyframes v49CtaPulseAway{
+  0%{transform:translateY(0) scale(1);opacity:1}
+  38%{transform:translateY(2px) scale(1.07);opacity:1}
+  100%{transform:translateY(10px) scale(.72);opacity:0}
+}
+
+@media(max-width:560px){
+  #opening.opening-out .ball-top{
+    animation-name:v49TopHalfOpen!important;
+  }
+  #opening.opening-out .ball-bottom{
+    animation-name:v49BottomHalfOpen!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #opening.opening-out .ball,
+  #opening.opening-out .ball-top,
+  #opening.opening-out .ball-bottom,
+  #opening.opening-out .ball-center,
+  #opening.opening-out .ball-center::before,
+  #opening.opening-out .ball::after,
+  #opening.opening-out .opening-particles,
+  #opening.opening-out .opening-flash,
+  #opening.opening-out .open-btn{
+    animation:none!important;
+  }
+}
+
+/* V50: smooth, shape-preserving Poké Ball opening. Scoped to #opening only. */
+#opening.opening-out .ball{
+  /* Keep the actual circle geometrically stable: no scale/rotation animation. */
+  overflow:visible !important;
+  transform:translate3d(var(--ball-x),var(--ball-y),0) rotate(var(--ball-r)) !important;
+  animation:none !important;
+  filter:drop-shadow(0 27px 28px rgba(49,84,28,.24)) !important;
+}
+#opening.opening-out .ball-half{
+  transition:none !important;
+  will-change:transform,opacity;
+}
+/* The two semicircles leave from the center seam; neither half is scaled or skewed. */
+#opening.opening-out .ball-top{
+  animation:v50TopOpen 1.62s cubic-bezier(.16,.72,.18,1) .12s forwards !important;
+}
+#opening.opening-out .ball-bottom{
+  animation:v50BottomOpen 1.62s cubic-bezier(.16,.72,.18,1) .12s forwards !important;
+}
+@keyframes v50TopOpen{
+  0%{transform:translate3d(0,0,0) rotate(0deg);opacity:1}
+  16%{transform:translate3d(-2px,-5px,0) rotate(-.35deg);opacity:1}
+  100%{transform:translate3d(-5vw,-66vh,0) rotate(-4deg);opacity:.04}
+}
+@keyframes v50BottomOpen{
+  0%{transform:translate3d(0,0,0) rotate(0deg);opacity:1}
+  16%{transform:translate3d(2px,5px,0) rotate(.35deg);opacity:1}
+  100%{transform:translate3d(5vw,66vh,0) rotate(4deg);opacity:.04}
+}
+/* Center button: controlled release, not a giant shape-changing scale. */
+#opening.opening-out .ball-center{
+  animation:v50CenterRelease 1.05s cubic-bezier(.18,.72,.18,1) .08s forwards !important;
+}
+@keyframes v50CenterRelease{
+  0%{transform:translate(-50%,-50%) scale(1);opacity:1;filter:brightness(1);}
+  28%{transform:translate(-50%,-50%) scale(1.08);opacity:1;filter:brightness(1.12);}
+  62%{transform:translate(-50%,-50%) scale(1.24);opacity:.86;filter:brightness(1.28);}
+  100%{transform:translate(-50%,-50%) scale(1.42);opacity:0;filter:brightness(1.45);}
+}
+/* One clean expanding light ring from the center. */
+#opening.opening-out .ball-center::before{
+  animation:v50Ring 1.08s cubic-bezier(.16,.75,.2,1) .05s forwards !important;
+}
+@keyframes v50Ring{
+  0%{transform:scale(.25);opacity:0;border-color:rgba(255,255,255,0)}
+  20%{transform:scale(.55);opacity:1;border-color:rgba(255,255,255,.95)}
+  100%{transform:scale(2.7);opacity:0;border-color:rgba(255,255,255,0)}
+}
+/* Soft light, no aggressive flash that can feel like a frame drop. */
+#opening.opening-out .opening-flash{
+  animation:v50Flash 1.18s ease-out .20s forwards !important;
+}
+@keyframes v50Flash{
+  0%{opacity:0;transform:scale(.72)}
+  20%{opacity:.72;transform:scale(.88)}
+  48%{opacity:.34;transform:scale(1.08)}
+  100%{opacity:0;transform:scale(1.28)}
+}
+/* Background elements gently recede instead of jumping. */
+#opening.opening-out .opening-parallax{
+  animation:v50ScenePush 1.72s cubic-bezier(.2,.7,.2,1) forwards !important;
+}
+@keyframes v50ScenePush{
+  from{transform:scale(1) translate3d(0,0,0)}
+  to{transform:scale(1.035) translate3d(0,-5px,0)}
+}
+#opening.opening-out .opening-title,
+#opening.opening-out .opening-sub,
+#opening.opening-out .open-btn,
+#opening.opening-out .opening-foot{
+  animation:v50TextExit .85s ease-out .18s forwards !important;
+}
+@keyframes v50TextExit{
+  from{opacity:1;transform:translateY(0)}
+  to{opacity:0;transform:translateY(-10px)}
+}
+/* A very short fade over the complete opening page hides the handoff cleanly. */
+#opening.opening-out{
+  animation:v50OpeningFade 1.78s ease-in-out .10s forwards;
+}
+@keyframes v50OpeningFade{
+  0%{opacity:1}
+  72%{opacity:1}
+  100%{opacity:0}
+}
+@media(max-width:700px){
+  #opening.opening-out .ball-top{animation-name:v50TopOpen!important}
+  #opening.opening-out .ball-bottom{animation-name:v50BottomOpen!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening.opening-out,
+  #opening.opening-out .ball,
+  #opening.opening-out .ball-top,
+  #opening.opening-out .ball-bottom,
+  #opening.opening-out .ball-center,
+  #opening.opening-out .ball-center::before,
+  #opening.opening-out .opening-flash,
+  #opening.opening-out .opening-parallax,
+  #opening.opening-out .opening-title,
+  #opening.opening-out .opening-sub,
+  #opening.opening-out .open-btn,
+  #opening.opening-out .opening-foot{animation:none!important}
+}
+
+/* V52 footer polish — compact, recruiter-focused, existing Pokémon strip retained. */
+.v52-footer-main{
+  min-height:112px;
+  padding:22px clamp(22px,5vw,72px) 18px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  background:#2f6b2f;
+  color:#f7f9e8;
+}
+.v52-footer-copy{min-width:0}
+.v52-footer-kicker{
+  display:block;
+  margin-bottom:4px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  opacity:.78;
+}
+.v52-footer-copy h2{
+  margin:0;
+  font-size:clamp(19px,2.2vw,27px);
+  line-height:1.15;
+  font-weight:800;
+}
+.v52-footer-copy p{
+  margin:7px 0 0;
+  font-size:12px;
+  line-height:1.45;
+  opacity:.82;
+}
+.v52-footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px;
+  flex-shrink:0;
+}
+.v52-footer-links a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:0 14px;
+  border:1px solid rgba(247,249,232,.38);
+  border-radius:999px;
+  background:rgba(247,249,232,.10);
+  color:#f7f9e8;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+.v52-footer-links a:hover,
+.v52-footer-links a:focus-visible{
+  transform:translateY(-2px);
+  background:rgba(247,249,232,.18);
+  border-color:rgba(247,249,232,.72);
+  outline:none;
+}
+.v52-footer-strip{
+  height:52px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  background:#79c23a;
+  position:relative;
+}
+.v52-footer-strip img,
+.v52-footer-strip picture,
+.v52-footer-strip svg{
+  max-height:52px;
+}
+.v52-footer-legal{
+  min-height:34px;
+  padding:7px 18px 8px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:4px 16px;
+  background:#285d2b;
+  color:rgba(247,249,232,.78);
+  text-align:center;
+  font-size:10px;
+  line-height:1.35;
+}
+@media(max-width:720px){
+  .v52-footer-main{
+    min-height:145px;
+    padding:18px 18px 16px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .v52-footer-links{
+    justify-content:flex-start;
+  }
+  .v52-footer-links a{
+    min-height:34px;
+    padding:0 12px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .v52-footer-links a{transition:none}
+}
+
+/* V53 — recruiter-focused footer content + restored Pokémon hover names.
+   Keeps the footer compact and does not alter the Pokémon artwork itself. */
+.v52-footer-main{
+  min-height:118px;
+}
+.v52-footer-copy p{
+  max-width:820px;
+}
+.v52-footer-strip{
+  gap:0;
+}
+.v53-pokemon{
+  position:relative;
+  display:inline-flex;
+  align-items:flex-end;
+  justify-content:center;
+  flex:0 0 auto;
+  height:52px;
+  cursor:help;
+}
+.v53-pokemon img{
+  display:block;
+  max-height:52px;
+  width:auto;
+  height:auto;
+  transition:transform .16s ease,filter .16s ease;
+}
+.v53-pokemon:hover img,
+.v53-pokemon:focus-visible img{
+  transform:translateY(-4px) scale(1.04);
+  filter:drop-shadow(0 4px 5px rgba(23,59,42,.25));
+}
+
+
+.v53-pokemon:hover::after,
+.v53-pokemon:hover::before,
+.v53-pokemon:focus-visible::after,
+.v53-pokemon:focus-visible::before{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+@media(max-width:720px){
+  .v52-footer-main{
+    min-height:151px;
+  }
+  .v52-footer-copy p{
+    max-width:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .v53-pokemon img,
+  .v53-pokemon::after,
+  
+}
+
+/* V30 — final character positioning + scenic profile backdrop.
+   Only the profile character scene is changed here. */
+#details .character-box{
+  background:
+    radial-gradient(ellipse 90px 30px at 18% 18%, rgba(255,255,255,.82) 0 38%, transparent 40%),
+    radial-gradient(ellipse 65px 24px at 24% 15%, rgba(255,255,255,.72) 0 42%, transparent 44%),
+    radial-gradient(ellipse 105px 34px at 82% 24%, rgba(255,255,255,.78) 0 37%, transparent 39%),
+    radial-gradient(ellipse 70px 25px at 76% 20%, rgba(255,255,255,.68) 0 42%, transparent 44%),
+    radial-gradient(ellipse 55% 32% at 50% 79%, rgba(122,166,75,.22), transparent 72%),
+    linear-gradient(180deg,#b9e4f4 0%,#c9eaf5 48%,#dcefbf 49%,#d2eab1 76%,#86bf45 77%,#78b83e 100%);
+  background-size:auto;
+  background-position:center;
+}
+
+/* Keep Rakesh visually centered and grounded — no large upward offset. */
+#details .character-box img{
+  height:84%;
+  max-width:86%;
+  transform-origin:50% 100%;
+  animation:characterIdleV30 4.4s cubic-bezier(.45,.05,.55,.95) infinite;
+  filter:drop-shadow(0 7px 5px rgba(31,65,27,.13));
+  mix-blend-mode:normal;
+  background:transparent;
+}
+@keyframes characterIdleV30{
+  0%,100%{transform:translate3d(0,-4px,0) rotate(0deg) scale(1)}
+  18%{transform:translate3d(-1px,-5px,0) rotate(-.16deg) scale(1.001)}
+  40%{transform:translate3d(1px,-8px,0) rotate(.22deg) scale(1.003)}
+  58%{transform:translate3d(2px,-6px,0) rotate(.16deg) scale(1.002)}
+  78%{transform:translate3d(-1px,-4px,0) rotate(-.10deg) scale(1.001)}
+}
+
+/* A soft scenic haze behind the character; does not tint the character itself. */
+#details .character-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 90px 30px at 18% 18%,rgba(255,255,255,.18),transparent 72%),
+    radial-gradient(ellipse 110px 35px at 82% 24%,rgba(255,255,255,.16),transparent 72%),
+    linear-gradient(165deg,transparent 0 54%,rgba(117,157,73,.12) 55% 58%,transparent 59% 100%);
+}
+#details .character-box .badge{z-index:4}
+#details .character-box img{z-index:3}
+#details .character-box::after{z-index:2}
+
+@media (prefers-reduced-motion:reduce){
+  #details .character-box img{animation:none!important;transform:translateY(-4px)!important}
+}
+
+/* =========================================================
+   V34 — NON-FOOTER POLISH ONLY
+   Footer intentionally untouched.
+   ========================================================= */
+
+/* Say Hello: make the recruiter CTA unmistakably interactive. */
+.cta-email{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  animation:helloFloatV34 2.35s ease-in-out infinite;
+}
+.cta-email::after{
+  content:"";
+  position:absolute;
+  top:-30%;
+  bottom:-30%;
+  left:-65%;
+  width:42%;
+  border-radius:999px;
+  background:linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,.08) 35%,
+    rgba(255,255,255,.62) 50%,
+    rgba(255,255,255,.08) 65%,
+    transparent 100%
+  );
+  transform:skewX(-18deg);
+  pointer-events:none;
+  animation:helloShineV34 3.1s ease-in-out infinite;
+}
+.cta-email span{
+  position:relative;
+  z-index:1;
+}
+@keyframes helloFloatV34{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-4px) scale(1.018)}
+}
+@keyframes helloShineV34{
+  0%,45%{left:-65%;opacity:0}
+  55%{opacity:1}
+  78%,100%{left:125%;opacity:0}
+}
+
+/* More natural floating character: slightly larger vertical movement,
+   tiny side-to-side drift, and a soft shadow that follows the lift. */
+#details .character-box img{
+  animation:characterFloatV34 4.9s cubic-bezier(.45,.05,.55,.95) infinite!important;
+}
+#details .character-box::after{
+  animation:characterShadowV34 4.9s ease-in-out infinite!important;
+}
+@keyframes characterFloatV34{
+  0%,100%{
+    transform:translate3d(0,-9px,0) rotate(0deg) scale(1);
+  }
+  18%{
+    transform:translate3d(-1.5px,-13px,0) rotate(-.12deg) scale(1.002);
+  }
+  38%{
+    transform:translate3d(1.5px,-19px,0) rotate(.20deg) scale(1.006);
+  }
+  52%{
+    transform:translate3d(2px,-21px,0) rotate(.12deg) scale(1.008);
+  }
+  68%{
+    transform:translate3d(-1px,-16px,0) rotate(-.14deg) scale(1.004);
+  }
+  84%{
+    transform:translate3d(-1.5px,-11px,0) rotate(-.08deg) scale(1.001);
+  }
+}
+@keyframes characterShadowV34{
+  0%,100%{
+    opacity:.14;
+    transform:translateX(-50%) scaleX(1);
+  }
+  38%,52%{
+    opacity:.055;
+    transform:translateX(-50%) scaleX(.72);
+  }
+  68%{
+    opacity:.085;
+    transform:translateX(-50%) scaleX(.86);
+  }
+}
+
+/* Faster, smoother clouds on the portfolio/details background.
+   Only cloud timing changes; their artwork and layout stay the same. */
+#details .cloud.one{
+  animation-duration:15s!important;
+}
+#details .cloud.two{
+  animation-duration:18s!important;
+}
+#details .cloud.three{
+  animation-duration:16s!important;
+}
+
+/* A little extra depth on the main portfolio cards, without touching
+   the footer or changing the page structure. */
+#details .details-card,
+#details .details-profile{
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),
+             box-shadow .28s ease;
+}
+#details .details-card:hover,
+#details .details-profile:hover{
+  transform:translateY(-3px);
+  box-shadow:0 22px 50px rgba(45,68,91,.14);
+}
+
+/* Keep all V34 motion respectful of reduced-motion preferences. */
+@media(prefers-reduced-motion:reduce){
+  .cta-email,
+  .cta-email::after,
+  #details .character-box img,
+  #details .character-box::after,
+  #details .details-card,
+  #details .details-profile{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+
+
+
+/* =========================================================
+   FINAL V35 — PREMIUM POLISH, NON-FOOTER ONLY
+   The footer markup and footer styles are intentionally untouched.
+   ========================================================= */
+
+/* ---------- Opening: stronger Poké Ball personality ---------- */
+#opening .ball{
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),filter .28s ease;
+}
+#opening .ball:hover{
+  transform:translate3d(var(--ball-x),var(--ball-y),0) rotate(var(--ball-r)) scale(1.022);
+  filter:drop-shadow(0 34px 38px rgba(49,84,28,.31));
+}
+#opening .ball:hover .ball-center{
+  box-shadow:
+    0 0 0 6px #e1e3e4 inset,
+    0 0 0 1px #7f8488,
+    0 0 20px 5px rgba(255,255,255,.36);
+}
+#opening .ball-center{
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .3s ease,box-shadow .28s ease;
+}
+
+/* Make the landing CTA feel like an invitation to click. */
+#opening .open-btn{
+  position:relative;
+  overflow:hidden;
+  animation:openCtaFloatV35 2.8s ease-in-out infinite;
+}
+#opening .open-btn::after{
+  content:"";
+  position:absolute;
+  top:-35%;bottom:-35%;left:-70%;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.62),transparent);
+  transform:skewX(-18deg);
+  animation:openCtaShineV35 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes openCtaFloatV35{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes openCtaShineV35{0%,48%{left:-70%;opacity:0}56%{opacity:1}80%,100%{left:135%;opacity:0}}
+
+/* Subtle depth layers for pointer movement. */
+#opening .opening-mountains{will-change:transform}
+#opening .opening-hills{will-change:transform}
+#opening .opening-grass{will-change:transform}
+
+/* ---------- Second page: living scenic background ---------- */
+#details .single-page-scene::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.26;
+  background-image:
+    radial-gradient(circle at 14% 34%,rgba(255,255,255,.9) 0 1.5px,transparent 2px),
+    radial-gradient(circle at 68% 27%,rgba(255,255,255,.72) 0 1.2px,transparent 1.8px),
+    radial-gradient(circle at 84% 63%,rgba(114,157,102,.25) 0 1.3px,transparent 1.9px);
+  background-size:170px 145px,210px 175px,230px 190px;
+  animation:sceneParticlesV35 12s linear infinite;
+}
+@keyframes sceneParticlesV35{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-22px,-10px,0)}
+}
+
+/* More natural cloud movement without changing their appearance. */
+#details .single-page-scene .cloud.one{animation-duration:6.5s!important}
+#details .single-page-scene .cloud.two{animation-duration:7.5s!important}
+#details .single-page-scene .cloud.three{animation-duration:8.5s!important}
+
+/* ---------- Character: gentle airborne feeling ---------- */
+#details .character-box img{
+  animation:characterFloatV35 5.6s cubic-bezier(.45,.05,.55,.95) infinite!important;
+}
+#details .character-box::after{
+  animation:characterShadowV35 5.6s ease-in-out infinite!important;
+}
+@keyframes characterFloatV35{
+  0%,100%{transform:translate3d(0,-4px,0) rotate(0deg) scale(1)}
+  20%{transform:translate3d(-2px,-8px,0) rotate(-.16deg) scale(1.002)}
+  42%{transform:translate3d(2px,-15px,0) rotate(.22deg) scale(1.005)}
+  55%{transform:translate3d(3px,-18px,0) rotate(.10deg) scale(1.007)}
+  72%{transform:translate3d(-1px,-12px,0) rotate(-.14deg) scale(1.004)}
+  88%{transform:translate3d(-2px,-7px,0) rotate(-.06deg) scale(1.001)}
+}
+@keyframes characterShadowV35{
+  0%,100%{opacity:.14;transform:translateX(-50%) scaleX(1)}
+  42%{opacity:.08;transform:translateX(-50%) scaleX(.86)}
+  55%{opacity:.055;transform:translateX(-50%) scaleX(.76)}
+  72%{opacity:.095;transform:translateX(-50%) scaleX(.88)}
+}
+
+/* ---------- Scroll reveals: smoother, staggered ---------- */
+#details .reveal:not(.show){will-change:opacity,transform}
+#details .reveal.show{
+  animation:revealSettleV35 .65s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes revealSettleV35{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ---------- Experience tabs: clearer selected state ---------- */
+#details .tabs .tab{
+  position:relative;
+  border-radius:10px;
+  margin:3px 0;
+}
+#details .tabs .tab::before{
+  content:"";
+  position:absolute;
+  left:-4px;
+  top:50%;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:#e3350d;
+  border:2px solid #fff;
+  box-shadow:0 0 0 1px #172238;
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform .2s ease;
+}
+#details .tabs .tab.active{
+  background:linear-gradient(90deg,rgba(40,174,115,.10),transparent);
+}
+#details .tabs .tab.active::before{transform:translate(-50%,-50%) scale(1)}
+
+/* ---------- Projects: more tactile but still professional ---------- */
+#details .project{
+  transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease,border-color .24s ease;
+}
+#details .project:hover{
+  transform:translateY(-6px) scale(1.008);
+  box-shadow:0 18px 34px rgba(45,68,91,.15);
+}
+#details .project-arrow{transition:transform .22s ease}
+#details .project:hover .project-arrow{transform:translate(3px,-3px)}
+
+/* ---------- Toolbox: tiny tactile feedback ---------- */
+#details .tech:hover{
+  transform:translateY(-3px) scale(1.015);
+}
+
+@media(max-width:700px){
+  #details .project:hover,#details .details-card:hover,#details .details-profile:hover{transform:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #opening .open-btn,
+  #opening .open-btn::after,
+  #details .single-page-scene::before,
+  #details .character-box img,
+  #details .character-box::after,
+  #details .reveal.show{
+    animation:none!important;
+  }
+  #opening .ball:hover{transform:none}
+}
+
+/* Resume actions — About section only. Footer intentionally untouched. */
+.about-resume-actions-final{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:9px;
+  margin-top:18px;
+}
+.about-resume-actions-final a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:42px;
+  padding:9px 15px;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.01em;
+  transition:transform .22s ease,box-shadow .22s ease,filter .22s ease;
+}
+.resume-view-final{
+  background:#fffef7;
+  color:#1a1a2e;
+  border:2px solid rgba(26,26,46,.14);
+  box-shadow:0 7px 18px rgba(25,45,60,.10);
+}
+.about-resume-actions-final a:hover,
+.about-resume-actions-final a:focus-visible{
+  transform:translateY(-3px);
+  box-shadow:0 13px 26px rgba(25,45,60,.16);
+}
+.about-resume-actions-final a:active{transform:translateY(-1px) scale(.99)}
+@media(max-width:520px){
+  .about-resume-actions-final a{flex:1 1 145px}
+}
+@media(prefers-reduced-motion:reduce){
+  .about-resume-actions-final a{transition:none}
+}
+
+
+/* About + View Resume: same existing title row. Footer untouched. */
+.about .about-title-with-resume{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:nowrap;
+}
+.about .about-title-with-resume .about-heading-text{
+  flex:0 0 auto;
+}
+.about .about-title-with-resume .resume-view-final{
+  flex:0 0 auto;
+  margin:0;
+  white-space:nowrap;
+}
+@media(max-width:600px){
+  .about .about-title-with-resume{gap:12px}
+}
+
+
+/* Compact Pokémon-themed View Resume button — footer untouched */
+.about .about-title-with-resume .resume-view-final{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  padding:9px 16px !important;
+  min-height:40px !important;
+  font-size:13px !important;
+  line-height:1 !important;
+  font-weight:800 !important;
+  border:2px solid #d8d8d8 !important;
+  border-radius:999px !important;
+  background:#fffef7 !important;
+  color:#1a1a2e !important;
+  box-shadow:0 4px 10px rgba(25,45,60,.10) !important;
+  white-space:nowrap !important;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
+}
+.about .about-title-with-resume .resume-view-final:hover{
+  transform:translateY(-2px) !important;
+  border-color:#e3350d !important;
+  box-shadow:0 6px 14px rgba(25,45,60,.14) !important;
+}
+.about .about-title-with-resume .resume-view-final span[aria-hidden="true"]{
+  font-size:14px !important;
+}
+
+
+/* FINAL POLISH — page content only; footer intentionally excluded */
+#home .pokeball,#home .pokeball-wrap,.home .pokeball,.home .pokeball-wrap{will-change:transform,filter}
+#home .pokeball:hover,.home .pokeball:hover{filter:drop-shadow(0 16px 22px rgba(25,45,65,.18))}
+#details .details-card,#details .details-profile,#details .project-card{transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease}
+#details .details-card:hover,#details .details-profile:hover,#details .project-card:hover{transform:translateY(-2px)}
+#details .skill,#details .skill-pill,#details .tech-pill,#details .tag{transition:transform .18s ease,box-shadow .18s ease}
+#details .skill:hover,#details .skill-pill:hover,#details .tech-pill:hover,#details .tag:hover{transform:translateY(-2px);box-shadow:0 5px 12px rgba(25,45,65,.10)}
+#details .resume-view-final,.about .resume-view-final{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+#details .resume-view-final:hover,.about .resume-view-final:hover{transform:translateY(-2px);border-color:#e3350d!important;box-shadow:0 7px 15px rgba(25,45,65,.13)}
+#details .character-box img{animation:finalCharacterFloat 5.6s ease-in-out infinite;will-change:transform}
+@keyframes finalCharacterFloat{0%,100%{transform:translate3d(0,-7px,0) rotate(0deg)}25%{transform:translate3d(-1px,-11px,0) rotate(-.10deg)}50%{transform:translate3d(1px,-15px,0) rotate(.12deg)}75%{transform:translate3d(1px,-10px,0) rotate(.06deg)}}
+#details .cloud.one{animation-duration:16s}.cloud.two{animation-duration:19s}.cloud.three{animation-duration:17s}
+#home a:focus-visible,#home button:focus-visible,#details a:focus-visible,#details button:focus-visible{outline:3px solid rgba(61,125,202,.45);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#details .character-box img,#details .details-card,#details .details-profile,#details .project-card,#details .skill,#details .skill-pill,#details .tech-pill,#details .tag,#details .resume-view-final,.about .resume-view-final{animation:none!important;transition:none!important}}
+
+
+
+/* V36 — subtle opening-world additions only. Footer untouched. */
+#opening .opening-sun{
+  position:absolute;
+  z-index:0;
+  width:clamp(52px,5.2vw,72px);
+  height:clamp(52px,5.2vw,72px);
+  top:9%;
+  left:9%;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle at 38% 35%,#fffef0 0 14%,#fff5ae 28%,#ffe477 55%,#ffd35a 72%,#f7c84d 100%);
+  filter:drop-shadow(0 0 18px rgba(255,225,116,.58));
+  opacity:.82;
+  animation:openingSunPulse 6s ease-in-out infinite;
+}
+#opening .opening-sun:before{
+  content:"";
+  position:absolute;
+  inset:-17px;
+  border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,239,150,.34) 0deg 5deg,transparent 5deg 20deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 48%,#000 55% 66%,transparent 73%);
+  mask:radial-gradient(circle,transparent 0 48%,#000 55% 66%,transparent 73%);
+  animation:sunRays 10s linear infinite;
+  opacity:.8;
+}
+#opening .opening-sun:after{
+  content:"";
+  position:absolute;
+  width:32%;
+  height:20%;
+  left:24%;
+  top:19%;
+  border-radius:50%;
+  background:rgba(255,255,255,.78);
+  filter:blur(6px);
+  transform:rotate(-22deg);
+  animation:sunShine 3.8s ease-in-out infinite;
+}
+@keyframes sunRays{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@keyframes sunShine{
+  0%,100%{opacity:.35;transform:rotate(-22deg) translate3d(0,0,0) scale(.9)}
+  50%{opacity:.95;transform:rotate(-22deg) translate3d(4px,2px,0) scale(1.15)}
+}
+@keyframes openingSunPulse{
+  0%,100%{transform:scale(1);opacity:.68}
+  50%{transform:scale(1.045);opacity:.78}
+}
+#opening .opening-particles{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+#opening .opening-particles i{
+  position:absolute;
+  width:4px;height:4px;
+  border-radius:50%;
+  background:rgba(255,255,255,.55);
+  box-shadow:0 0 7px rgba(255,255,255,.22);
+  animation:openingParticleFloat 8s ease-in-out infinite;
+}
+#opening .opening-particles i:nth-child(1){left:12%;top:28%;animation-delay:-1s}
+#opening .opening-particles i:nth-child(2){left:24%;top:44%;width:3px;height:3px;animation-delay:-4s}
+#opening .opening-particles i:nth-child(3){left:37%;top:23%;animation-delay:-6s}
+#opening .opening-particles i:nth-child(4){left:63%;top:31%;width:3px;height:3px;animation-delay:-2s}
+#opening .opening-particles i:nth-child(5){left:76%;top:45%;animation-delay:-7s}
+#opening .opening-particles i:nth-child(6){left:87%;top:27%;width:3px;height:3px;animation-delay:-3s}
+#opening .opening-particles i:nth-child(7){left:54%;top:55%;width:3px;height:3px;animation-delay:-5s}
+#opening .opening-particles i:nth-child(8){left:18%;top:63%;width:3px;height:3px;animation-delay:-8s}
+@keyframes openingParticleFloat{
+  0%,100%{transform:translate3d(0,0,0);opacity:.2}
+  50%{transform:translate3d(8px,-13px,0);opacity:.7}
+}
+#opening .opening-butterfly{
+  position:absolute;
+  z-index:1;
+  left:74%;
+  top:28%;
+  font-size:clamp(18px,2vw,28px);
+  filter:drop-shadow(0 5px 5px rgba(37,78,46,.16));
+  pointer-events:none;
+  user-select:none;
+  animation:openingButterflyFloat 14s ease-in-out infinite;
+}
+@keyframes openingButterflyFloat{
+  0%,100%{transform:translate3d(0,0,0) rotate(-5deg);opacity:.82}
+  25%{transform:translate3d(-55px,18px,0) rotate(4deg);opacity:1}
+  50%{transform:translate3d(-105px,-8px,0) rotate(-3deg);opacity:.9}
+  75%{transform:translate3d(-55px,-27px,0) rotate(5deg);opacity:1}
+}
+/* Keep the CTA visually below the oversized ball, including during floating motion. */
+#opening .ball-float{margin-bottom:30px;z-index:3}
+#opening .open-btn{margin-top:0;z-index:6}
+@media(max-width:560px){
+  #opening .opening-sun{top:7%;left:4%;width:46px;height:46px}
+  #opening .opening-butterfly{left:79%;top:25%;font-size:18px}
+  #opening .ball-float{margin-bottom:24px}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .opening-sun,#opening .opening-particles i,#opening .opening-butterfly{animation:none!important}
+}
+
+/* V38 — small Pokémon car on the grass; footer untouched. */
+#opening .opening-car{
+  position:absolute;
+  z-index:2;
+  left:-150px;
+  bottom:32%;
+  width:118px;
+  height:58px;
+  pointer-events:none;
+  will-change:transform;
+  animation:openingCarDrive 18s linear infinite;
+  filter:drop-shadow(0 7px 5px rgba(37,78,46,.20));
+}
+#opening .car-body{
+  position:absolute;
+  left:8px;right:8px;bottom:10px;height:29px;
+  border-radius:16px 20px 8px 8px;
+  background:linear-gradient(180deg,#e84b3f 0%,#c92f2c 72%,#a92527 100%);
+  border:2px solid rgba(54,52,47,.22);
+  box-shadow:inset 0 5px 0 rgba(255,255,255,.14);
+}
+#opening .car-roof{
+  position:absolute;left:29px;top:5px;width:60px;height:24px;
+  border-radius:24px 24px 5px 5px;
+  background:#d83b36;
+  border:2px solid rgba(54,52,47,.22);
+}
+#opening .car-window{
+  position:absolute;z-index:2;left:35px;top:10px;width:48px;height:17px;
+  border-radius:12px 12px 4px 4px;
+  background:linear-gradient(135deg,rgba(207,241,250,.96),rgba(101,183,215,.82));
+  border:2px solid rgba(41,67,77,.35);
+}
+#opening .car-window:after{
+  content:"";position:absolute;left:23px;top:0;width:2px;height:100%;
+  background:rgba(41,67,77,.28);transform:rotate(5deg);
+}
+#opening .car-driver{
+  position:absolute;z-index:3;left:43px;top:1px;width:30px;height:25px;
+  overflow:hidden;pointer-events:none;
+}
+#opening .car-driver img{
+  width:34px;height:34px;object-fit:contain;image-rendering:auto;
+  transform:translate(-2px,-3px);
+  filter:drop-shadow(0 2px 2px rgba(35,65,35,.20));
+}
+#opening .car-light{
+  position:absolute;right:-1px;top:9px;width:7px;height:7px;border-radius:50%;
+  background:#fff6a8;box-shadow:0 0 8px rgba(255,245,160,.8);
+}
+#opening .car-wheel{
+  position:absolute;z-index:4;bottom:2px;width:17px;height:17px;border-radius:50%;
+  background:#252b2f;border:3px solid #596168;
+  box-shadow:inset 0 0 0 2px #202529;
+  animation:carWheelSpin .55s linear infinite;
+}
+#opening .car-wheel-a{left:20px}.car-wheel-b{right:19px}
+#opening .car-dust{
+  position:absolute;z-index:0;bottom:5px;width:7px;height:7px;border-radius:50%;
+  background:rgba(238,246,220,.58);opacity:0;
+  animation:carDust 1.15s ease-out infinite;
+}
+#opening .dust-a{left:4px}.dust-b{left:-9px;animation-delay:.38s!important}
+@keyframes openingCarDrive{
+  0%{transform:translate3d(0,0,0) scale(.96)}
+  7%{transform:translate3d(5vw,-1px,0) scale(.97)}
+  50%{transform:translate3d(58vw,1px,0) scale(1)}
+  93%{transform:translate3d(111vw,-1px,0) scale(1.02)}
+  100%{transform:translate3d(125vw,0,0) scale(1.02)}
+}
+@keyframes carWheelSpin{to{transform:rotate(360deg)}}
+@keyframes carDust{
+  0%{transform:translate3d(0,0,0) scale(.5);opacity:0}
+  25%{opacity:.5}
+  100%{transform:translate3d(-16px,-8px,0) scale(1.3);opacity:0}
+}
+@media(max-width:560px){
+  #opening .opening-car{width:92px;height:46px;bottom:32%;left:-115px;animation-duration:16s}
+  #opening .car-body{left:6px;right:6px;bottom:8px;height:24px}
+  #opening .car-roof{left:23px;top:5px;width:48px;height:19px}
+  #opening .car-window{left:28px;top:9px;width:38px;height:14px}
+  #opening .car-driver{left:34px;top:1px;width:24px;height:21px}
+  #opening .car-driver img{width:28px;height:28px}
+  #opening .car-wheel{width:14px;height:14px}
+  #opening .car-wheel-a{left:15px}.car-wheel-b{right:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  #opening .opening-car,#opening .car-wheel,#opening .car-dust{animation:none!important}
+}
+
+/* FINAL HERO MICRO-FIX — requested changes only; footer untouched */
+#opening .opening-title{display:none!important;}
+#opening .opening-sub{transform:translateY(-12px);margin-bottom:8px;}
+#opening .ball{width:min(52vw,66vh,660px);height:min(52vw,66vh,660px);}
+@media(max-width:900px){#opening .ball{width:min(66vw,62vh,590px);height:min(66vw,62vh,590px);}}
+@media(max-width:560px){#opening .ball{width:min(86vw,54vh,450px);height:min(86vw,54vh,450px);}}
+
+/* V47 — recruiter-focused polish. Footer intentionally untouched. */
+
+/* Character discovery: subtle, non-intrusive hover identity card. */
+#details .character-box{isolation:isolate;overflow:hidden}
+#details .character-hover-card{
+  position:absolute;
+  left:50%;
+  bottom:14px;
+  z-index:5;
+  transform:translate(-50%,10px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  min-width:168px;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:12px;
+  background:rgba(35,52,78,.86);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(25,45,65,.18);
+  backdrop-filter:blur(8px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease;
+}
+#details .character-hover-card strong{font-size:12px;line-height:1.2}
+#details .character-hover-card span{font-size:10px;line-height:1.2;color:#dce8f7}
+#details .character-box:hover .character-hover-card,
+#details .character-box:focus-within .character-hover-card{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* Slightly richer depth for project cards; no content/layout change. */
+#details .project{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+#details .project::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent 0 42%,rgba(255,255,255,.34) 50%,transparent 58%);
+  transform:translateX(-120%);
+  transition:transform .55s ease;
+  pointer-events:none;
+}
+#details .project:hover::after,
+#details .project:focus-visible::after{transform:translateX(120%)}
+
+/* More cinematic day/night transition while preserving the existing design. */
+body,
+#opening,
+#opening .opening-cloud,
+#opening .opening-sun,
+#opening .opening-moon,
+#opening .opening-stars,
+#opening .opening-hills,
+#opening .opening-mountains,
+#opening .opening-grass,
+#opening .grass-back,
+#opening .grass-mid,
+#opening .grass-front,
+#details .single-page-scene,
+#details .details-moon,
+#details .details-stars,
+#details .cloud,
+#details .character-box{
+  transition-property:background,background-color,background-image,opacity,filter,box-shadow;
+  transition-duration:.72s;
+  transition-timing-function:cubic-bezier(.2,.7,.2,1);
+}
+
+/* The resume CTA remains compact and aligned with About. */
+.about .about-title-with-resume .resume-view-final{
+  min-width:0!important;
+  max-width:150px!important;
+  padding:8px 14px!important;
+  font-size:12px!important;
+}
+
+/* Keyboard users get the same polish as mouse users. */
+#details .character-box:focus-within{outline:2px solid rgba(61,125,202,.32);outline-offset:4px}
+
+@media(prefers-reduced-motion:reduce){
+  #details .character-hover-card,#details .project::after{transition:none!important}
+  body,#opening,#opening .opening-cloud,#opening .opening-sun,#opening .opening-moon,#opening .opening-stars,#opening .opening-hills,#opening .opening-mountains,#opening .opening-grass,#opening .grass-back,#opening .grass-mid,#opening .grass-front,#details .single-page-scene,#details .details-moon,#details .details-stars,#details .cloud,#details .character-box{transition:none!important}
+}
+
+
+/* =========================================================
+   RESPONSIVE V56
+   Mobile/tablet safety improvements.
+   Desktop styling remains unchanged.
+   ========================================================= */
+
+html, body {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+#opening {
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+#opening .ball-wrap,
+#opening .pokeball-wrap {
+  max-width: min(420px, 82vw);
+}
+
+#opening .ball,
+#opening .pokeball {
+  max-width: 100%;
+  transform-origin: center center;
+}
+
+#opening .open-btn,
+#opening .cta,
+#opening .tap-cta {
+  max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 900px) {
+  #opening .ball-wrap,
+  #opening .pokeball-wrap {
+    width: min(330px, 64vw);
+  }
+
+  #opening .open-btn,
+  #opening .cta,
+  #opening .tap-cta {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  #opening .ball-wrap,
+  #opening .pokeball-wrap {
+    width: min(285px, 68vw);
+  }
+
+  #opening .ball,
+  #opening .pokeball {
+    width: 100%;
+    height: auto;
+  }
+
+  #opening .open-btn,
+  #opening .cta,
+  #opening .tap-cta {
+    white-space: nowrap;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 11px;
+  }
+
+  /* Keep the cinematic split inside the viewport on phones. */
+  #opening.opening-out .ball-top {
+    transform: translate3d(0, calc(var(--v56-split-distance) * -1), 0) rotate(-5deg) !important;
+  }
+
+  #opening.opening-out .ball-bottom {
+    transform: translate3d(0, var(--v56-split-distance), 0) rotate(5deg) !important;
+  }
+}
+
+@media (max-width: 430px) {
+  #opening .ball-wrap,
+  #opening .pokeball-wrap {
+    width: min(250px, 70vw);
+  }
+
+  #opening .open-btn,
+  #opening .cta,
+  #opening .tap-cta {
+    max-width: calc(100vw - 28px);
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 700px) {
+  #opening .ball-wrap,
+  #opening .pokeball-wrap {
+    width: min(230px, 54vh);
+  }
+}
+
+
+/* =========================================================
+   V56 POLISH — subtle interaction/reliability improvements
+   Existing UI, footer, colors and layout remain unchanged.
+   ========================================================= */
+
+/* Character hover/focus: restore the small name label without changing footer size. */
+.v53-pokemon{
+  position:relative;
+}
+.v53-pokemon:focus-visible{
+  outline:2px solid #ffcb05;
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* Keep the opening scene inside the viewport on every narrow device. */
+#opening{
+  width:100%;
+  max-width:100vw;
+  overflow:hidden;
+}
+@media (max-width:600px){
+  #opening .ball,
+  #opening .pokeball{
+    max-width:72vw;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
+@media (max-width:430px){
+  #opening .ball,
+  #opening .pokeball{
+    max-width:68vw;
+  }
+}
+
+/* Prevent accidental horizontal overflow in the portfolio view. */
+#details,
+#info{
+  max-width:100vw;
+  overflow-x:hidden;
+}
+
+/* Smooth but restrained interactive feedback for existing CTAs/cards. */
+.open-btn,
+.cta,
+a[href*="Resume"],
+a[href^="mailto:"],
+a[href*="linkedin.com"]{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Respect users who request reduced motion. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+  }
+}
+
+@media(max-width:600px){
+  #opening.opening-out .ball-top{
+    transform:translate3d(0,calc(var(--safe-opening-split) * -1),0) rotate(-5deg)!important;
+  }
+  #opening.opening-out .ball-bottom{
+    transform:translate3d(0,var(--safe-opening-split),0) rotate(5deg)!important;
+  }
+}
+
+
+
+/* v56-no-question-mark: character names come only from explicit data-name. */
+.v53-pokemon img{
+  pointer-events:none;
+}
+.v53-pokemon[title]{
+  /* Explicitly handled by the custom tooltip; native title is not used. */
+}
+
+
+/* Final hover safeguard: the character name is rendered only by JS. */
+.v53-pokemon::before,
+
+
+/* FINAL CHARACTER HOVER FIX — name only, no question-mark pseudo element */
+.v53-pokemon::before,
+.v53-pokemon::after {
+  display:none !important;
+  content:none !important;
+  visibility:hidden !important;
+}
+.v56-character-name-tooltip {
+  position:fixed;
+  z-index:2147483647;
+  pointer-events:none;
+  display:none;
+  padding:5px 9px;
+  border-radius:7px;
+  background:rgba(23,59,42,.96);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+  transform:translate(-50%,-100%);
+  margin-top:-8px;
+}
+.v56-character-name-tooltip.is-visible {
+  display:block;
+}
